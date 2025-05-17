@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">Nama:\t%1$s</string>
+    <string name="address">Alamat:\t%1$s</string>
+    <string name="household_size">Jumlah Anggota Keluarga:\t%1$s</string>
+    <string name="additional_description">Deskripsi Tambahan:\t%1$s</string>
+</resources>
