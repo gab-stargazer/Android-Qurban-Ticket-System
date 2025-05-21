@@ -1,16 +1,23 @@
 [versions]
 agp = "8.10.0"
 kotlin = "2.0.21"
+kotlin-ksp = "2.0.21-1.0.27"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.0"
 activityCompose = "1.10.1"
-composeBom = "2025.05.00"
+
+bom-compose = "2025.05.00"
+bom-koin = "4.0.3"
+
+arrow = "2.1.0"
 appcompat = "1.7.0"
 material = "1.12.0"
 uiTooling = "1.8.1"
+
+room = "2.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -19,15 +26,40 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+
+#   Arrow
+arrow-bom = { module = "io.arrow-kt:arrow-stack", version.ref = "arrow" }
+arrow-core = { module = "io.arrow-kt:arrow-core" }
+
+
+
+
+
+
+#   Compose
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "bom-compose" }
 compose-icon = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+#   Koin
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "bom-koin" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
+koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation" }
+
+#   Room
+room = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
@@ -36,5 +68,6 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", vers
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 

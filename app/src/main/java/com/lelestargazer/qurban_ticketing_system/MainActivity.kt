@@ -5,13 +5,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.lelestargazer.qurban_ticketing_system.ui.theme.QurbanTicketingSystemTheme
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.lelestargazer.qurban_ticketing_system.common.LocalScreenPadding
+import com.lelestargazer.qurban_ticketing_system.common.LocalParentNavigator
+import com.lelestargazer.qurban_ticketing_system.common.shared.CustomPadding
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.ui.participantManagementRoute
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.ui.route.ManagementRoute.ParticipantManagement
+import com.lelestargazer.qurban_ticketing_system.theme.QurbanTicketingSystemTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,29 +25,27 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QurbanTicketingSystemTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                val navController: NavHostController = rememberNavController()
+
+                CompositionLocalProvider(
+                    LocalParentNavigator provides navController,
+                    LocalScreenPadding provides CustomPadding(
+                        horizontal = 16.dp,
+                        vertical = 12.dp
                     )
+                ) {
+                    NavHost(
+                        navController,
+                        ParticipantManagement,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .statusBarsPadding()
+                    ) {
+                        participantManagementRoute()
+                    }
                 }
+
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    QurbanTicketingSystemTheme {
-        Greeting("Android")
     }
 }

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization") version "2.1.21"
 }
 
 android {
@@ -34,6 +35,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += "-Xskip-prerelease-check"
     }
 
     buildFeatures {
@@ -44,6 +46,12 @@ android {
 dependencies {
 
     // Feature
+    implementation(projects.core.common)
+    implementation(projects.core.theme)
+    implementation(projects.feature.participantManagementSystem.data)
+    implementation(projects.feature.participantManagementSystem.ui)
+
+
 
     // Participant Management
 //    implementation(projects.feature.participantManagement.ui)
@@ -63,4 +71,14 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+
+    val nav_version = "2.9.0"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 }
