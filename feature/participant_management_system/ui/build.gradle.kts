@@ -85,5 +85,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
     implementation("org.apache.commons:commons-text:1.10.0")
+    implementation("io.coil-kt.coil3:coil-svg:3.0.4")
+
 
 }

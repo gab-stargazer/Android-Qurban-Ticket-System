@@ -1,16 +1,19 @@
 package com.lelestargazer.qurban_ticketing_system.participant_management_system.data
 
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.data.dao.ParticipantDao
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.data.dao.TicketDao
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.data.entity.ParticipantEntity
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.data.entity.toDomain
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.data.entity.toEntity
-import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.Participant
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.ParticipantRepository
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model.Participant
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model.ParticipantAndTicket
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class ParticipantRepositoryImpl(
     private val participantDao: ParticipantDao,
+    private val ticketDao: TicketDao,
 ) : ParticipantRepository {
 
     override suspend fun insertParticipant(
@@ -46,5 +49,9 @@ class ParticipantRepositoryImpl(
         return participantDao.getInactiveParticipant().map { it ->
             it.map(ParticipantEntity::toDomain)
         }
+    }
+
+    override fun getParticipantWithTicket(): Flow<List<ParticipantAndTicket>> {
+       TODO()
     }
 }

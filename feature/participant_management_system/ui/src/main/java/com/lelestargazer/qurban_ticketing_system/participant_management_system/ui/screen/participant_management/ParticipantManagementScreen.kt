@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lelestargazer.qurban_ticketing_system.common.LocalScreenPadding
-import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.Participant
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model.Participant
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.ui.R
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.ui.component.ParticipantItem
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.ui.screen.participant_management.ParticipantManagementEvent.OnNavigateToAddParticipant

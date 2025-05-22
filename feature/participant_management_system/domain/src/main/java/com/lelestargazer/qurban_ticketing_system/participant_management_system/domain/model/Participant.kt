@@ -1,11 +1,13 @@
-package com.lelestargazer.qurban_ticketing_system.participant_management_system.domain
+package com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model
 
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.UUIDSerializer
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Serializable
 data class Participant(
-    @Serializable(with = UUIDSerializer::class) val id: UUID,
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID,
     val name: String,
     val phoneNumber: String,
     val address: String,

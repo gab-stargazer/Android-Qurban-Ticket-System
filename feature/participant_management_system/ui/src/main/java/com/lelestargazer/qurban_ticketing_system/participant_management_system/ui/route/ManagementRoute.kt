@@ -1,6 +1,6 @@
 package com.lelestargazer.qurban_ticketing_system.participant_management_system.ui.route
 
-import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.Participant
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model.Participant
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,9 +10,12 @@ sealed class ManagementRoute {
     data object ParticipantManagement : ManagementRoute()
 
     @Serializable
+    data object ParticipantTicketing : ManagementRoute()
+
+    @Serializable
     data class ParticipantAddOrEdit(
         val type: ParticipantAddOrEditType,
-        val participant: Participant?
+        val participant: Participant?,
     ) : ManagementRoute() {
 
         enum class ParticipantAddOrEditType {

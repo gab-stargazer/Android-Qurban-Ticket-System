@@ -3,7 +3,7 @@ package com.lelestargazer.qurban_ticketing_system.participant_management_system.
 import android.net.Uri
 import androidx.navigation.NavType
 import androidx.savedstate.SavedState
-import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.Participant
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model.Participant
 import kotlinx.serialization.json.Json
 
 val navType = object : NavType<Participant?>(

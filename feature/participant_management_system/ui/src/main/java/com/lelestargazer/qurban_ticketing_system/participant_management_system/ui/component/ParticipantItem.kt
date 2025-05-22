@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PersonOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.lelestargazer.qurban_ticketing_system.common.LocalScreenPadding
-import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.Participant
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model.Participant
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.ui.R
 
 @Composable
@@ -56,11 +57,18 @@ fun LazyItemScope.ParticipantItem(
                     .padding(vertical = screenPadding.vertical)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Person,
+                    imageVector =
+                        when (participant.isActive) {
+                            true -> Icons.Default.Person
+                            false -> Icons.Default.PersonOff
+                        },
                     contentDescription = null,
                 )
                 Text(
-                    stringResource(R.string.tv_active_participant),
+                    when(participant.isActive) {
+                        true -> stringResource(R.string.tv_active_participant)
+                        false -> stringResource(R.string.tv_nonactive_participant)
+                    },
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Bold
                     ),

@@ -3,7 +3,7 @@ package com.lelestargazer.qurban_ticketing_system.participant_management_system.
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.Participant
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model.Participant
 import java.util.UUID
 
 @Entity(

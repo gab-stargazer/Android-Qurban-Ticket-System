@@ -3,6 +3,7 @@ package com.lelestargazer.qurban_ticketing_system.participant_management_system.
 import androidx.room.Room
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.data.ParticipantRepositoryImpl
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.data.dao.ParticipantDao
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.data.dao.TicketDao
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.data.db.RoomDB
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.ParticipantRepository
 import org.koin.android.ext.koin.androidContext
@@ -19,5 +20,10 @@ val dbModule = module {
         get<RoomDB>().participantDao()
     }
 
+    single<TicketDao> {
+        get<RoomDB>().ticketDao()
+    }
+
     singleOf(::ParticipantRepositoryImpl) { bind<ParticipantRepository>() }
+
 }

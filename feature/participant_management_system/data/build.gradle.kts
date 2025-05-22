@@ -52,4 +52,7 @@ dependencies {
     //  Room
     implementation(libs.room)
     ksp(libs.room.compiler)
+
+    implementation(platform("org.kotlincrypto.hash:bom:0.7.0"))
+    implementation("org.kotlincrypto.hash:sha3")
 }
