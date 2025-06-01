@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_member_ticketing_name">Nama %1$s</string>
+    <string name="tv_member_ticketing_phone">Nomor HP %1$s</string>
+    <string name="tv_member_ticketing_address">Alamat %1$s</string>
+    <string name="tv_member_ticketing_description">Catatan %1$s</string>
+    <string name="tv_ticket_claimed_by_admin">Tiket telah diklaim manual oleh admin</string>
+    <string name="tv_ticket_claimed_by_admin_short">Admin</string>
+    <string name="tv_ticket_claimed_by_qr">Tiket telah diklaim menggunakan scan QR</string>
+    <string name="tv_ticket_claimed_by_qr_short">Scan QR</string>
+    <string name="tv_ticket_not_claimed">Belum Ambil</string>
+    <string name="tv_ticketing_member_claimed">Peserta/Penerima yang telah mengambil</string>
+    <string name="tv_ticketing_not_created">Tiket belum dibuat</string>
+    <string name="tv_ticketing_status">Status:</string>
+
+
+    <!--Button-->
+    <string name="btn_ticketing_claim_coupon">Klaim Kupon</string>
+    <string name="btn_call_whatsapp">Hubungi Whatsapp</string>
+
+
+    <!--Message-->
+    <string name="msg_coupon_not_found">Kupon tidak ditemukan</string>
+    <string name="msg_loading_ticketing">Sedang membuat kupon, harap menunggu</string>
+</resources>

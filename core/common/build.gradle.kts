@@ -1,8 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.1.21"
 }
+
+apply(from = "${rootDir}/compose.gradle")
 
 android {
     namespace = "com.lelestargazer.qurban_ticketing_system.common"
@@ -24,10 +27,12 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -48,9 +53,12 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.ui.tooling.preview)
 
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
+
     val nav_version = "2.9.0"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation(libs.serialization)
 }

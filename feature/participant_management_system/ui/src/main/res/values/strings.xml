@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tv_name">Nama\t\t\t:\t%1$s</string>
-    <string name="tv_address">Alamat\t:\t%1$s</string>
-    <string name="tv_household_size">Jumlah Anggota Keluarga\t:\t%1$s</string>
-    <string name="tv_additional_description">Deskripsi Tambahan:\t%1$s</string>
-    <string name="tv_phone_number">Nomor HP\t:\t%1$s</string>
-    <string name="tv_active_participant">Peserta\nAktif</string>
-    <string name="tv_nonactive_participant">Peserta\nNonaktif</string>
-    <string name="tv_no_participant_data">Belum ada data peserta</string>
-    <string name="tv_qurban_active_participant">Peserta Qurban Aktif</string>
 
+
+
+
+
+    <string name="tv_nonactive_participant">Peserta\nNonaktif</string>
+
+    <!--Management Participant - Recipient-->
+    <string name="tv_qurban_title_participant_recipient_management">Manajemen\nPeserta/Penerima</string>
+    <string name="tv_qurban_active_recipient_short">Penerima Qurban</string>
+    <string name="tv_qurban_active_participant_short">Peserta Aktif</string>
+    <string name="tv_qurban_inactive_recipient_short">Bukan Penerima</string>
+
+    <!--Add Edit Participant - Recipient-->
+    <string name="tv_banner_add_participant_recipient">Tambahkan\nPeserta/Penerima</string>
+    <string name="tv_banner_edit_participant_recipient">Ubah Data\nPeserta/Penerima</string>
+    <string name="tv_qurban_title_participant">Status Kepesertaan</string>
+    <string name="tv_qurban_title_active_participant_recipient">Peserta/Penerima Qurban Aktif</string>
+    <string name="tv_qurban_title_inactive_participant_recipient">Peserta/Penerima Qurban Tidak Aktif</string>
+    <string name="tv_qurban_active_participant">Peserta Qurban Aktif</string>
+    <string name="tv_qurban_inactive_participant">Bukan Peserta</string>
+    <string name="tv_qurban_title_recipient">Status Penerima</string>
+    <string name="tv_qurban_active_recipient">Penerima Qurban Aktif</string>
+    <string name="tv_qurban_inactive_recipient">Bukan Penerima Qurban (Bukan Warga)</string>
 
     <!--Error-->
     <string name="error_name_is_blank">Nama tidak boleh kosong</string>
@@ -29,8 +43,28 @@
     <string name="form_household_size">Jumlah Anggota Keluarga</string>
     <string name="form_additional_description">Keterangan Tambahan</string>
     <string name="form_supporting_additional_description">Masukkan keterangan tambahan bila terdapat kemiripan nama atau informasi lain yang dibutuhkan</string>
-    <string name="form_search_name">Cari nama peserta</string>
+    <string name="form_search_name">Cari nama</string>
     <string name="tv_participant_status">Status Kepesertaan</string>
-    <string name="tv_qurban_inactive_participant">Peserta Qurban Tidak Aktif</string>
 
+    <!--Common-->
+    <string name="tv_member_name">Nama</string>
+    <string name="tv_member_phone">Nomor HP</string>
+    <string name="tv_member_address">Alamat</string>
+    <string name="tv_member_description">Catatan</string>
+    <string name="tv_member_participant">Peserta</string>
+    <string name="tv_member_recipient">Penerima</string>
+    <string name="tv_form_value">: %1$s</string>
+    <string name="tv_member_not_found">Nama tidak ditemukan</string>
+    <string name="btn_call_whatsapp">Hubungi Whatsapp</string>
+
+    <!--Ticketing Screen-->
+
+
+    <string name="tv_no_participant_data">Belum ada data peserta</string>
+
+    <string name="tv_name">Nama</string>
+    <string name="tv_phone_number">Nomor HP</string>
+    <string name="tv_address">Address</string>
+    <string name="tv_household_size">Address</string>
+    <string name="tv_additional_description">Address</string>
 </resources>

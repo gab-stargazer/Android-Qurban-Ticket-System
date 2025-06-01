@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "740394421802",
+    "project_id": "qurban-ticketing-app",
+    "storage_bucket": "qurban-ticketing-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740394421802:android:c004a66f80d3c146c6fd53",
+        "android_client_info": {
+          "package_name": "com.lelestargazer.qurban_ticketing_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBBY2A3QXq1vkvX317VH6eYUE2mwRzBI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_ticket_successfully_claimed">Tiket berhasil digunakan</string>
+    <string name="msg_member_successfully_added">Peserta/Penerima berhasil ditambahkan</string>
+    <string name="msg_member_successfully_edited">Peserta/Penerima berhasil diubah</string>
+</resources>

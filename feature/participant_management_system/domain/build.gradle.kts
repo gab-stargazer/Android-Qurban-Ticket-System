@@ -42,5 +42,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    //  Serialization
+    implementation(libs.serialization)
+
+    // Arrow
+    implementation(platform(libs.arrow.bom))
+    implementation(libs.arrow.core)
 }

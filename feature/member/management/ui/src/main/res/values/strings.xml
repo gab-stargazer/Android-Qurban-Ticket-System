@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_qurban_active_recipient_short">Penerima</string>
+    <string name="tv_qurban_active_participant_short">Peserta</string>
+    <string name="tv_qurban_inactive_recipient_short">Bukan Penerima</string>
+
+    <string name="tv_name">Nama\t:\t%1$s</string>
+    <string name="tv_management_address">Alamat\t:\t%1$s</string>
+    <string name="tv_household_size">Jumlah Anggota Keluarga\t:\t%1$s</string>
+    <string name="tv_additional_description">Deskripsi Tambahan:\t%1$s</string>
+    <string name="tv_phone_number">Nomor HP\t:\t%1$s</string>
+    <string name="tv_active_participant">Peserta\nAktif</string>
+    <string name="tv_no_participant_data">Belum ada data peserta</string>
+
+    <!--Form-->
+    <string name="form_name">Nama</string>
+    <string name="form_phone_number">Nomor HP</string>
+    <string name="form_address">Alamat</string>
+    <string name="form_household_size">Jumlah Anggota Keluarga</string>
+    <string name="form_additional_description">Keterangan Tambahan</string>
+    <string name="form_supporting_additional_description">Masukkan keterangan tambahan bila terdapat kemiripan nama atau informasi lain yang dibutuhkan</string>
+    <string name="form_search_name">Cari nama</string>
+    <string name="tv_participant_status">Status Kepesertaan</string>
+
+    <!--Add Edit Participant - Recipient-->
+
+    <!--Error-->
+    <string name="error_name_is_blank">Nama tidak boleh kosong</string>
+    <string name="error_phone_number_is_blank">Nomor HP tidak boleh kosong</string>
+    <string name="error_phone_number_is_not_sufficient">Nomor HP tidak boleh kurang dari 11 digit</string>
+    <string name="error_rt_is_empty">Nomor RT tidak boleh kosong</string>
+    <string name="error_address_is_blank">Alamat tidak boleh kosong</string>
+    <string name="error_household_size">Jumlah keluarga tidak boleh kurang dari 1</string>
+</resources>

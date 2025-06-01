@@ -16,6 +16,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://jitpack.io") }
     }
 }
 
@@ -27,3 +28,8 @@ include(":feature:participant_management_system:domain")
 include(":feature:participant_management_system:data")
 include(":core:theme")
 include(":core:common")
+include(":feature:member:management:ui")
+include(":feature:member:shared:domain")
+include(":feature:member:shared:data")
+include(":feature:member:shared:common")
+include(":feature:member:ticketing:ui")

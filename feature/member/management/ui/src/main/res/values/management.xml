@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_management_banner_title">Manajemen\nPeserta/Penerima</string>
+    <string name="tv_management_name">Nama: %1$s</string>
+    <string name="tv_management_status">Status: %1$s</string>
+    <string name="tv_management_rt_rw">Rt/RW: %1$s</string>
+    <string name="tv_management_description">Keterangan\t: %1$s</string>
+</resources>

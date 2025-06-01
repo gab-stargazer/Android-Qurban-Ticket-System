@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_coupon_successfully_claimed">Kupon berhasil digunakan</string>
+    <string name="msg_member_successfully_added">Peserta/Penerima berhasil ditambahkan</string>
+    <string name="msg_member_successfully_edited">Peserta/Penerima berhasil diubah</string>
+
+    <string name="msg_member_participant">Peserta</string>
+    <string name="msg_member_recipient">Penerima</string>
+
+
+    <string name="msg_excel_create_members_failed">Member gagal ditambahkan melalui data excel</string>
+    <string name="msg_excel_create_members_success">Member berhasil ditambahkan melalui data excel</string>
+
+
+    <string name="tv_no_data">Peserta/Penerima tidak ditemukan</string>
+
+    <!--Form-->
+    <string name="tv_member_search">Cari Peserta/Penerima</string>
+    <string name="tv_member_name">Nama</string>
+    <string name="tv_member_phone">Nomor HP</string>
+    <string name="tv_member_address">Alamat</string>
+    <string name="tv_member_description">Catatan</string>
+    <string name="tv_member_participant">Peserta</string>
+    <string name="tv_member_recipient">Penerima</string>
+    <string name="tv_form_value">: %1$s</string>
+
+
+
+</resources>

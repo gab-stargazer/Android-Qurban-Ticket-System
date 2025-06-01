@@ -2,13 +2,23 @@ package com.lelestargazer.qurban_ticketing_system.participant_management_system.
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.TicketRedeemStatus
+import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model.TicketRedeemStatus
 import com.lelestargazer.qurban_ticketing_system.participant_management_system.domain.model.Ticket
 import java.util.UUID
 
 @Entity(
-    tableName = "ticket_table"
+    tableName = "ticket_table",
+    foreignKeys = [
+        ForeignKey(
+            entity = ParticipantRecipientEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["participant_id"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
+        )
+    ]
 )
 data class TicketEntity(
 
@@ -34,6 +44,16 @@ data class TicketEntity(
 
 fun TicketEntity.toDomain(): Ticket =
     Ticket(
+        id = id,
+        participantID = participantID,
+        participantName = participantName,
+        ticketYear = ticketYear,
+        hashCode = hashCode,
+        claimStatus = claimStatus
+    )
+
+fun Ticket.toEntity(): TicketEntity =
+    TicketEntity(
         id = id,
         participantID = participantID,
         participantName = participantName,

@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+apply(from = "$rootDir/compose.gradle")
+
 android {
     namespace = "com.lelestargazer.qurban_ticketing_system.theme"
     compileSdk = 35
@@ -48,11 +50,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.icon)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.graphics)
-    implementation(libs.compose.ui.tooling)
-    implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.compose.material3)
+    val nav_version = "2.9.0"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 }

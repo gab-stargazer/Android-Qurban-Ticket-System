@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tv_banner_add_participant_recipient">Tambahkan\nPeserta/Penerima</string>
+    <string name="tv_banner_edit_participant_recipient">Ubah Data\nPeserta/Penerima</string>
+    <string name="tv_qurban_title_participant">Status Kepesertaan</string>
+    <string name="tv_qurban_title_active_participant_recipient">Peserta/Penerima Qurban Aktif</string>
+    <string name="tv_qurban_title_inactive_participant_recipient">Peserta/Penerima Qurban Tidak Aktif</string>
+    <string name="tv_qurban_active_participant">Peserta Qurban Aktif</string>
+    <string name="tv_qurban_inactive_participant">Bukan Peserta</string>
+    <string name="tv_qurban_title_recipient">Status Penerima</string>
+    <string name="tv_qurban_active_recipient">Penerima Qurban Aktif</string>
+    <string name="tv_qurban_inactive_recipient">Bukan Penerima Qurban (Bukan Warga)</string>
+
+    <!--Btn-->
+    <string name="btn_add_participant">Tambahkan Peserta</string>
+    <string name="btn_edit_participant">Ubah Data Peserta</string>
+</resources>

@@ -1,4 +1,4 @@
-package com.lelestargazer.qurban_ticketing_system.theme
+package com.example.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -7,6 +7,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.lelestargazer.qurban_ticketing_system.theme.R
 
 val poppinsFamily = FontFamily(
     fonts = listOf(
@@ -50,16 +51,20 @@ val Typography = Typography(
     ), titleLarge = TextStyle(
         fontFamily = poppinsFamily
     ), titleMedium = TextStyle(
-        fontFamily = poppinsFamily
+        fontFamily = poppinsFamily,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.SemiBold
     ), titleSmall = TextStyle(
         fontFamily = poppinsFamily
     ), bodyLarge = TextStyle(
-        fontFamily = poppinsFamily
-    ), bodyMedium = TextStyle(
         fontFamily = poppinsFamily,
         fontSize = 16.sp
+    ), bodyMedium = TextStyle(
+        fontFamily = poppinsFamily,
+        fontSize = 14.sp
     ), bodySmall = TextStyle(
-        fontFamily = poppinsFamily
+        fontFamily = poppinsFamily,
+        fontSize = 12.sp
     ), labelLarge = TextStyle(
         fontFamily = poppinsFamily
     ), labelMedium = TextStyle(

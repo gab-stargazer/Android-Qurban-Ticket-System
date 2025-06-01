@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.1.21"
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -11,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.lelestargazer.qurban_ticketing_system"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -53,6 +55,13 @@ dependencies {
 
 
 
+    implementation(projects.feature.member.shared.common)
+    implementation(projects.feature.member.shared.data)
+    implementation(projects.feature.member.management.ui)
+    implementation(projects.feature.member.ticketing.ui)
+
+
+
     // Participant Management
 //    implementation(projects.feature.participantManagement.ui)
 
@@ -81,4 +90,10 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics")
+
+    implementation ("com.google.accompanist:accompanist-permissions:0.37.3")
 }

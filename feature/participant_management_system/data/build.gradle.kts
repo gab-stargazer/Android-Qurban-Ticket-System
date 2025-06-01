@@ -55,4 +55,10 @@ dependencies {
 
     implementation(platform("org.kotlincrypto.hash:bom:0.7.0"))
     implementation("org.kotlincrypto.hash:sha3")
+    implementation("com.google.zxing:core:3.4.0")
+    implementation("io.github.g0dkar:qrcode-kotlin:4.4.1")
+    implementation("com.itextpdf:itext7-core:7.2.5")
+
+    implementation(platform(libs.arrow.bom))
+    implementation(libs.arrow.core)
 }
