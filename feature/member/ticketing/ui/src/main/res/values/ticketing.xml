@@ -12,6 +12,8 @@
     <string name="tv_ticketing_member_claimed">Peserta/Penerima yang telah mengambil</string>
     <string name="tv_ticketing_not_created">Tiket belum dibuat</string>
     <string name="tv_ticketing_status">Status:</string>
+    <string name="tv_total_member">Total Peserta/Penerima: %1$s Orang</string>
+    <string name="tv_total_unclaimed_coupon">Kupon Tersedia: %1$s Kupon</string>
 
 
     <!--Button-->
@@ -20,6 +22,5 @@
 
 
     <!--Message-->
-    <string name="msg_coupon_not_found">Kupon tidak ditemukan</string>
     <string name="msg_loading_ticketing">Sedang membuat kupon, harap menunggu</string>
 </resources>

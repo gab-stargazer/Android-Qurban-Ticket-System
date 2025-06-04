@@ -48,4 +48,7 @@ dependencies {
     // Arrow
     implementation(platform(libs.arrow.bom))
     implementation(libs.arrow.core)
+
+    //  Paging
+    implementation(libs.paging)
 }

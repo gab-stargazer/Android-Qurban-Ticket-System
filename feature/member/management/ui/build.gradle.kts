@@ -71,4 +71,8 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation(libs.serialization)
+
+    //  Paging
+    implementation(libs.paging)
+    implementation(libs.paging.compose)
 }

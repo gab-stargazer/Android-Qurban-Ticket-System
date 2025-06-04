@@ -5,19 +5,17 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,21 +31,21 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.R
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.component.ManagementItem
-import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.ManagementTicketingBanner
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.OnBackPressed
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.OnNavigateToAdd
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.OnNavigateToEdit
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.OnPressed
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.OnQueryChanged
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.MemberManagementState
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.MemberManagementState.OpenedParticipantType.ACTIVE
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.MemberManagementState.OpenedParticipantType.INACTIVE
-import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Member
+import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.ManagementTicketingBanner
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
 import com.lelestargazer.qurban_ticketing_system.theme.QurbanTicketingSystemTheme
 
@@ -62,6 +60,7 @@ fun ManagementScreen(
 ) {
     val screenPadding = LocalScreenPadding.current
     val input = LocalSoftwareKeyboardController.current
+    val members = state.members.collectAsLazyPagingItems()
 
     Scaffold(
         floatingActionButton = {
@@ -133,137 +132,52 @@ fun ManagementScreen(
                     .border(1.dp, Color.Black, RoundedCornerShape(25F))
             )
 
-            AnimatedContent(
-                state.activeParticipantRecipient.isNotEmpty() ||
-                        state.inactiveParticipantRecipient.isNotEmpty()
-            ) { isExist ->
-                when (isExist) {
-                    true -> {
-                        LazyColumn(
-                            state = rememberLazyListState(),
-                            contentPadding = PaddingValues(bottom = 48.dp, top = 0.dp),
-                        ) {
-                            item {
-                                if (state.activeParticipantRecipient.isNotEmpty()) {
-                                    Text(
-                                        text = stringResource(id = R.string.tv_qurban_title_active_participant_recipient),
-                                        style = MaterialTheme.typography.bodyMedium.copy(
-                                            fontWeight = FontWeight.SemiBold
-                                        ),
-                                        modifier = Modifier
-                                            .padding(horizontal = screenPadding.horizontal)
-                                            .animateItem()
-                                    )
-                                }
-                            }
-
-                            itemsIndexed(
-                                items = state.activeParticipantRecipient,
-                                contentType = { index: Int, member: Member -> member },
-                                key = { index: Int, member: Member -> member.id }
-                            ) { index: Int, member: Member ->
-                                val isParticipantSelected: Boolean =
-                                    state.openedParticipantType == ACTIVE &&
-                                            state.openedParticipantIndex == index
-
-                                ManagementItem(
-                                    member = member,
-                                    isParticipantSelected = isParticipantSelected,
-                                    onClick = {
-                                        if (isParticipantSelected) {
-                                            onEvent(
-                                                OnPressed(
-                                                    type = null,
-                                                    index = null
-                                                )
-                                            )
-                                        } else {
-                                            onEvent(
-                                                OnPressed(
-                                                    type = ACTIVE,
-                                                    index = index
-                                                )
-                                            )
-                                        }
-                                    },
-                                    onNavigateToEdit = {
-                                        onEvent(
-                                            OnNavigateToEdit(member)
-                                        )
-                                    }
-                                )
-                            }
-
-                            item {
-                                if (state.inactiveParticipantRecipient.isNotEmpty()) {
-                                    Text(
-                                        text = stringResource(R.string.tv_qurban_title_inactive_participant_recipient),
-                                        style = MaterialTheme.typography.bodyMedium.copy(
-                                            fontWeight = FontWeight.SemiBold
-                                        ),
-                                        modifier = Modifier
-                                            .padding(horizontal = screenPadding.horizontal)
-                                            .animateItem()
-                                    )
-                                }
-                            }
-
-                            itemsIndexed(
-                                state.inactiveParticipantRecipient,
-                                contentType = { index: Int, item: Member ->
-                                    item
-                                },
-                                key = { index: Int, item: Member ->
-                                    item.id
-                                }
-                            ) { index, member ->
-                                val isParticipantSelected: Boolean =
-                                    state.openedParticipantType == INACTIVE &&
-                                            state.openedParticipantIndex == index
-
-                                ManagementItem(
-                                    member = member,
-                                    isParticipantSelected = isParticipantSelected,
-                                    onClick = {
-                                        if (isParticipantSelected) {
-                                            onEvent(
-                                                OnPressed(
-                                                    type = null,
-                                                    index = null
-                                                )
-                                            )
-                                        } else {
-                                            onEvent(
-                                                OnPressed(
-                                                    type = INACTIVE,
-                                                    index = index
-                                                )
-                                            )
-                                        }
-                                    },
-                                    onNavigateToEdit = {
-                                        onEvent(
-                                            OnNavigateToEdit(member)
-                                        )
-                                    }
-                                )
-                            }
-                        }
+            AnimatedContent(members.loadState.refresh is LoadState.Loading) { isLoading ->
+                when (isLoading) {
+                    true -> Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        CircularProgressIndicator()
                     }
 
                     false -> {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.tv_no_participant_data),
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            )
+                        AnimatedContent(members.loadState.refresh is LoadState.NotLoading && members.itemSnapshotList.size == 0) { isDataEmpty ->
+                            when (isDataEmpty) {
+                                true -> Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    Text(
+                                        stringResource(R.string.tv_no_participant_data),
+                                        style = MaterialTheme.typography.bodyMedium.copy(
+                                            fontWeight = FontWeight.Bold,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    )
+                                }
+
+                                false -> {
+                                    LazyColumn {
+                                        items(count = members.itemCount) { index ->
+                                            members[index]?.let { member ->
+                                                val isMemberSelected =
+                                                    index == state.openedParticipantIndex
+                                                ManagementItem(
+                                                    member,
+                                                    isParticipantSelected = isMemberSelected,
+                                                    onClick = {
+                                                        onEvent(OnPressed(index))
+                                                    },
+                                                    onNavigateToEdit = {
+
+                                                    },
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

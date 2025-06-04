@@ -7,7 +7,8 @@ import io.retable.ExcelReadOptions
 import io.retable.Retable
 import java.io.File
 import java.net.URI
-import java.util.UUID
+import java.util.UUID.fromString
+import java.util.UUID.randomUUID
 
 class ExcelReader(
     private val context: Context,
@@ -28,16 +29,19 @@ class ExcelReader(
                     )
                 ).read(it)
 
+
+
+
                 entities.addAll(hello.records.map { record ->
                     MemberEntity(
-                        id = UUID.randomUUID(),
-                        name = record["Nama"].orEmpty(),
-                        phone = null,
-                        address = "",
-                        rt = 0,
-                        rw = 0,
-                        description = "",
-                        isParticipant = record["Status"] == "Peserta",
+                        id = record["id"]?.let { fromString(it) } ?: randomUUID(),
+                        name = record["nama"].orEmpty(),
+                        phone = record["nomor"],
+                        address = record["alamat"].orEmpty(),
+                        rt = record["rt"]?.toIntOrNull() ?: 0,
+                        rw = record["rw"]?.toIntOrNull() ?: 0,
+                        description = record["deskripsi"].orEmpty(),
+                        isParticipant = record["status"] == "Peserta",
                         isActive = true
                     )
                 }.toList())

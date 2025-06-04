@@ -52,10 +52,25 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("com.github.4sh:retable:0.2.8")
+    // Arrow
+    implementation(platform(libs.arrow.bom))
+    implementation(libs.arrow.core)
+
+    //  Itext
+    implementation(libs.itext)
+
+    //  Paging
+    implementation(libs.paging)
+
+    //  QR
+    implementation(libs.qr.generator)
+
+    //  Retable
+    implementation(libs.retable)
 
     //  Room
     implementation(libs.room)
+    implementation(libs.room.paging)
     ksp(libs.room.compiler)
 
     //  Koin
@@ -66,9 +81,4 @@ dependencies {
     implementation(platform("org.kotlincrypto.hash:bom:0.7.0"))
     implementation("org.kotlincrypto.hash:sha3")
     implementation("com.google.zxing:core:3.4.0")
-    implementation("io.github.g0dkar:qrcode-kotlin:4.4.1")
-    implementation("com.itextpdf:itext7-core:7.2.5")
-
-    implementation(platform(libs.arrow.bom))
-    implementation(libs.arrow.core)
 }

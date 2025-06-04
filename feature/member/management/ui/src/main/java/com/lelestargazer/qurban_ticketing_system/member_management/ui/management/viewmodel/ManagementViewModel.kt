@@ -3,17 +3,22 @@ package com.lelestargazer.qurban_ticketing_system.member_management.ui.managemen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import androidx.paging.PagingData
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.MemberManagementState
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.route.MemberAddEdit
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.route.MemberAddEdit.Type.ADD
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.route.MemberAddEdit.Type.EDIT
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Member
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.repository.MemberRepository
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.MemberManagementState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,40 +28,26 @@ class ManagementViewModel(
     private val repository: MemberRepository,
 ) : ViewModel() {
 
-    private val _activeParticipantRecipient: Flow<List<Member>> =
-        repository.getActiveMembers()
-    private val _inactiveParticipantRecipient: Flow<List<Member>> =
-        repository.getInactiveMembers()
+    private val _searchQuery: MutableStateFlow<String> = MutableStateFlow("")
 
-    private val _currentState = MutableStateFlow(MemberManagementState())
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+    private val _members: Flow<PagingData<Member>> = _searchQuery
+        .flatMapLatest { repository.getMembers(it) }
+        .debounce(150)
+
+    private val _currentState: MutableStateFlow<MemberManagementState> =
+        MutableStateFlow(MemberManagementState())
 
     val state = combine(
-        flow = _activeParticipantRecipient,
-        flow2 = _inactiveParticipantRecipient,
-        flow3 = _currentState
-    ) { activeMember, inactiveMember, currentState ->
-        if (currentState.query.isNotBlank()) {
-            MemberManagementState(
-                query = currentState.query,
-                activeParticipantRecipient = activeMember.filter { member: Member ->
-                    member.name.lowercase().contains(currentState.query.lowercase())
-                },
-                inactiveParticipantRecipient = inactiveMember.filter { member: Member ->
-                    member.name.lowercase().contains(currentState.query.lowercase())
-                },
-                openedParticipantType = currentState.openedParticipantType,
-                openedParticipantIndex = currentState.openedParticipantIndex
-            )
-        } else {
-            MemberManagementState(
-                query = currentState.query,
-                activeParticipantRecipient = activeMember,
-                inactiveParticipantRecipient = inactiveMember,
-                openedParticipantType = currentState.openedParticipantType,
-                openedParticipantIndex = currentState.openedParticipantIndex
-            )
-        }
-
+        flow = _searchQuery,
+        flow2 = _currentState,
+    ) { query, state ->
+        MemberManagementState(
+            query = query,
+            members = _members,
+            openedParticipantType = state.openedParticipantType,
+            openedParticipantIndex = state.openedParticipantIndex
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
@@ -65,19 +56,31 @@ class ManagementViewModel(
 
     fun onEvent(event: ManagementEvent) = viewModelScope.launch {
         when (event) {
-            is ManagementEvent.OnPressed -> _currentState.update {
-                it.copy(
-                    openedParticipantType = event.type,
-                    openedParticipantIndex = event.index
-                )
+            is ManagementEvent.OnPressed -> {
+                if (event.index == _currentState.value.openedParticipantIndex) {
+                    _currentState.update {
+                        it.copy(
+                            openedParticipantIndex = null
+                        )
+                    }
+                } else {
+                    _currentState.update {
+                        it.copy(
+                            openedParticipantIndex = event.index
+                        )
+                    }
+                }
             }
 
-            is ManagementEvent.OnQueryChanged -> _currentState.update {
-                it.copy(
-                    query = event.query,
-                    openedParticipantType = null,
-                    openedParticipantIndex = null
-                )
+            is ManagementEvent.OnQueryChanged -> {
+                _currentState.update {
+                    it.copy(
+                        openedParticipantType = null,
+                        openedParticipantIndex = null
+                    )
+                }
+
+                _searchQuery.update { event.query }
             }
 
             ManagementEvent.OnNavigateToAdd -> {

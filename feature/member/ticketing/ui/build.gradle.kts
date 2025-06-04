@@ -75,4 +75,6 @@ dependencies {
 
     implementation ("com.google.accompanist:accompanist-permissions:0.37.3")
     implementation("io.github.g00fy2.quickie:quickie-bundled:1.11.0")
+
+    implementation(libs.paging.compose)
 }

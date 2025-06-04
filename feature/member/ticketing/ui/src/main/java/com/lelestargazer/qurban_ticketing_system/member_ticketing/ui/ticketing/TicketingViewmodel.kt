@@ -1,20 +1,26 @@
 package com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.lelestargazer.qurban_ticketing_system.common.UiController
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Coupon
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.CouponRedeemStatus
+import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.MemberAndCoupon
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.repository.CouponRepository
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.repository.MemberRepository
 import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.TicketingState.TicketingBottomSheetState
 import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.TicketingState.TicketingBottomSheetState.TicketingType.MANUAL
 import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.TicketingState.TicketingBottomSheetState.TicketingType.SCAN
+import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.TicketingState.ViewType.ALL_MEMBERS
+import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.TicketingState.ViewType.AVAILABLE_COUPONS
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,42 +31,59 @@ class TicketingViewmodel(
     private val couponRepository: CouponRepository,
 ) : ViewModel() {
 
+    private val _searchQuery: MutableStateFlow<String> =
+        MutableStateFlow("")
+    private val _displayType: MutableStateFlow<TicketingState.ViewType> =
+        MutableStateFlow(ALL_MEMBERS)
+    private val _queryAndDisplayType: Flow<Pair<String, TicketingState.ViewType>> =
+        combine(
+            flow = _searchQuery,
+            flow2 = _displayType
+        ) { query, type ->
+            Pair(query, type)
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val _memberAndCouponPaging: Flow<PagingData<MemberAndCoupon>> =
+        _queryAndDisplayType.flatMapLatest { it ->
+            when (it.second) {
+                ALL_MEMBERS -> couponRepository.getMembersAndCoupons(
+                    it.first
+                )
+
+                AVAILABLE_COUPONS -> couponRepository.getMembersAndCouponsAvailable(
+                    it.first
+                )
+            }
+        }.cachedIn(viewModelScope)
+
+    private val _totalMember = memberRepository.getActiveMemberCount()
+    private val _totalUnclaimedCoupon = couponRepository.getMembersAndCouponsUnclaimedCount()
+
+
     private val _screenState = MutableStateFlow(TicketingState())
-    private val _memberAndTicket = memberRepository.getMemberAndTicket()
 
     val state = combine(
         flow = _screenState,
-        flow2 = _memberAndTicket
-    ) { currentState, memberAndTicket ->
-        if (currentState.query.isNotBlank()) {
-            TicketingState(
-                query = currentState.query,
-                isLoading = currentState.isLoading,
-                participantAndRecipient = memberAndTicket.filter { memberAndCoupon ->
-                    memberAndCoupon.member.name
-                        .lowercase()
-                        .contains(
-                            currentState.query.lowercase()
-                        )
-                },
-                isBottomSheetOpened = currentState.isBottomSheetOpened,
-                sheetState = currentState.sheetState
-            )
-        } else {
-            TicketingState(
-                query = currentState.query,
-                isLoading = currentState.isLoading,
-                participantAndRecipient = memberAndTicket,
-                isBottomSheetOpened = currentState.isBottomSheetOpened,
-                sheetState = currentState.sheetState
-            )
-        }
+        flow2 = _searchQuery,
+        flow3 = _totalMember,
+        flow4 = _totalUnclaimedCoupon,
+        flow5 = _displayType
+    ) { currentState, searchQuery, totalMember, totalUnclaimedCoupon, displayType ->
+        TicketingState(
+            query = searchQuery,
+            memberAndCoupon = _memberAndCouponPaging,
+            displayType = displayType,
+            totalMember = totalMember,
+            totalUnclaimedCoupon = totalUnclaimedCoupon,
+            isLoading = currentState.isLoading,
+            isBottomSheetOpened = currentState.isBottomSheetOpened,
+            sheetState = currentState.sheetState
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        initialValue = TicketingState(
-            participantAndRecipient = emptyList()
-        )
+        initialValue = TicketingState()
     )
 
     fun onEvent(event: TicketingEvent) = viewModelScope.launch {
@@ -71,7 +94,15 @@ class TicketingViewmodel(
                         isLoading = true
                     )
                 }
-                couponRepository.createCoupons()
+
+                couponRepository.createCoupons().fold(
+                    ifLeft = {
+                        uiController.snackBarHost.showSnackbar(it)
+                    }, ifRight = {
+                        uiController.snackBarHost.showSnackbar(it)
+                    }
+                )
+
                 _screenState.update {
                     it.copy(
                         isLoading = false
@@ -79,7 +110,8 @@ class TicketingViewmodel(
                 }
             }
 
-            is TicketingEvent.ClaimTicket -> {
+            is TicketingEvent.OnClaimTicket -> {
+                _screenState.update { it.copy(isLoading = true) }
                 val currentState = state.value
                 val ticket =
                     ((currentState.sheetState as TicketingBottomSheetState).selectedMember.coupon as Coupon).copy(
@@ -94,53 +126,38 @@ class TicketingViewmodel(
                     .onSome { msg ->
                         _screenState.update { state ->
                             state.copy(
+                                isLoading = false,
                                 isBottomSheetOpened = false,
                                 sheetState = null
                             )
                         }
                         uiController.snackBarHost.showSnackbar(message = msg)
                     }
-                    .onNone {
-
-                    }
             }
 
             is TicketingEvent.OnQueryChanged -> {
-                _screenState.update {
-                    it.copy(
-                        query = event.query
-                    )
-                }
+                _searchQuery.update { event.query }
             }
 
             is TicketingEvent.OnBottomSheetOpened -> {
-                if (event.type == MANUAL && event.qrHash == null) {
-                    //TODO: Toast no ticket and return
-                    return@launch
-                }
+                val hashCode = event.qrHash ?: return@launch
 
-                val _currentState = state.value
-                val hashCode = event.qrHash as String
-                try {
-                    val participantIndex =
-                        _currentState
-                            .participantAndRecipient
-                            .mapNotNull { it.coupon }
-                            .indexOfFirst { it.hashCode == hashCode }
-
-                    _screenState.update {
-                        it.copy(
-                            isBottomSheetOpened = true,
-                            sheetState = TicketingBottomSheetState(
-                                qrImage = couponRepository.getQrImage(hashCode),
-                                ticketingType = event.type,
-                                selectedMember = _currentState.participantAndRecipient[participantIndex]
+                couponRepository
+                    .getMembersAndCouponByHash(hashCode)
+                    .onLeft {
+                        uiController.snackBarHost.showSnackbar(it)
+                    }.onRight { memberAndCoupon ->
+                        _screenState.update { state ->
+                            state.copy(
+                                isBottomSheetOpened = true,
+                                sheetState = TicketingBottomSheetState(
+                                    qrImage = couponRepository.getQrImage(hashCode),
+                                    ticketingType = event.type,
+                                    selectedMember = memberAndCoupon
+                                )
                             )
-                        )
+                        }
                     }
-                } catch (e: Exception) {
-                    Log.e(TAG, "onEvent: ${e.stackTraceToString()}")
-                }
             }
 
             TicketingEvent.OnBottomSheetDismissed -> {
@@ -154,6 +171,10 @@ class TicketingViewmodel(
 
             TicketingEvent.OnBackPressed -> {
                 uiController.navController.popBackStack()
+            }
+
+            is TicketingEvent.OnViewTypeSwitch -> {
+                _displayType.update { event.displayType }
             }
         }
     }

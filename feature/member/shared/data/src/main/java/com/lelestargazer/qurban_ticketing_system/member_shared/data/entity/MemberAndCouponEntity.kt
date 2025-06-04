@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.MemberAndCoupon
 
-data class MemberAndTicketEntity(
+data class MemberAndCouponEntity(
 
     @Embedded
     val member: MemberEntity,
@@ -17,7 +17,7 @@ data class MemberAndTicketEntity(
     val coupon: CouponEntity?,
 )
 
-fun MemberAndTicketEntity.toDomain(): MemberAndCoupon =
+fun MemberAndCouponEntity.toDomain(): MemberAndCoupon =
     MemberAndCoupon(
         member = member.toDomain(),
         coupon = coupon?.toDomain()

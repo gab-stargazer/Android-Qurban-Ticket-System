@@ -6,6 +6,7 @@
 
     <string name="msg_member_participant">Peserta</string>
     <string name="msg_member_recipient">Penerima</string>
+    <string name="msg_coupon_not_found">Kupon tidak ditemukan</string>
 
 
     <string name="msg_excel_create_members_failed">Member gagal ditambahkan melalui data excel</string>

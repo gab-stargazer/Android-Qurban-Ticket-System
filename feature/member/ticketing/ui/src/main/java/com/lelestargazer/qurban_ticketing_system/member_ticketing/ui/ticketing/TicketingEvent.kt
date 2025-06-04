@@ -5,7 +5,7 @@ import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.T
 sealed class TicketingEvent {
     data object OnGenerateTicket : TicketingEvent()
 
-    data object ClaimTicket : TicketingEvent()
+    data object OnClaimTicket : TicketingEvent()
 
     data class OnQueryChanged(
         val query: String,
@@ -19,4 +19,6 @@ sealed class TicketingEvent {
     data object OnBottomSheetDismissed : TicketingEvent()
 
     data object OnBackPressed : TicketingEvent()
+
+    data class OnViewTypeSwitch(val displayType: TicketingState.ViewType): TicketingEvent()
 }
