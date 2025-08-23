@@ -1,7 +1,7 @@
 package com.lelestargazer.qurban_ticketing_system.member_shared.data.di
 
 import androidx.room.Room
-import com.lelestargazer.qurban_ticketing_system.member_shared.data.addon.ExcelReader
+import com.lelestargazer.qurban_ticketing_system.member_shared.data.addon.Excel
 import com.lelestargazer.qurban_ticketing_system.member_shared.data.dao.CouponDao
 import com.lelestargazer.qurban_ticketing_system.member_shared.data.dao.MemberDao
 import com.lelestargazer.qurban_ticketing_system.member_shared.data.db.ApplicationDB
@@ -31,5 +31,5 @@ val memberDataModule = module {
     singleOf(::MemberRepositoryImpl) { bind<MemberRepository>() }
     singleOf(::CouponRepositoryImpl) { bind<CouponRepository>() }
     singleOf(::QRGenerator)
-    singleOf(::ExcelReader)
+    singleOf(::Excel)
 }

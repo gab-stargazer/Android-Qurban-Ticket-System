@@ -34,6 +34,9 @@ data class MemberEntity(
     @ColumnInfo(name = "is_participant")
     val isParticipant: Boolean,
 
+    @ColumnInfo(name = "is_cow")
+    val isCow: Boolean?,
+
     @ColumnInfo(name = "is_active")
     val isActive: Boolean,
 )
@@ -48,6 +51,7 @@ fun MemberEntity.toDomain(): Member =
         rw = rw,
         description = description,
         isParticipant = isParticipant,
+        isCow = isCow,
         isActive = isActive
     )
 
@@ -61,5 +65,6 @@ fun Member.toEntity(): MemberEntity =
         rw = rw,
         description = description,
         isParticipant = isParticipant,
+        isCow = isCow,
         isActive = isActive
     )

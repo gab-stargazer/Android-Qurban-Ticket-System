@@ -16,13 +16,16 @@ interface MemberRepository {
         address: String,
         description: String,
         isParticipant: Boolean,
+        isCow: Boolean?,
     )
 
     fun getActiveMemberCount(): Flow<Int>
 
     suspend fun updateMember(member: Member)
 
-    suspend fun createMembersByExcel(uri: Uri): Either<String, String>
+    suspend fun exportMembersToExcel(): Either<String, String>
 
-    fun getMembers(query: String): Flow<PagingData<Member>>
+    suspend fun importMembersByExcel(uri: Uri): Either<String, String>
+
+    fun getActiveMembers(query: String): Flow<PagingData<Member>>
 }

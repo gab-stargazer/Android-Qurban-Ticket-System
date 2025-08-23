@@ -133,7 +133,8 @@ class AddEditViewmodel(
                     rw = 0,
                     address = currentState.address,
                     description = currentState.description,
-                    isParticipant = currentState.isParticipant
+                    isParticipant = currentState.isParticipant,
+                    isCow = true // TODO: Fix this later
                 )
             }
 

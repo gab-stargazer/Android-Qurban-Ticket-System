@@ -28,8 +28,14 @@ interface MemberDao {
     @Update
     suspend fun updateMember(member: MemberEntity)
 
-    @Query("SELECT * FROM member_table WHERE name LIKE '%' || :query || '%' ORDER BY name ASC")
-    fun getAllMembers(query: String): PagingSource<Int, MemberEntity>
+    @Query("SELECT * FROM member_table WHERE name LIKE '%' || :query || '%' AND is_active == 1 ORDER BY name ASC")
+    fun getActiveMembers(query: String): PagingSource<Int, MemberEntity>
+
+    @Query("SELECT * FROM member_table WHERE name LIKE '%' || :query || '%' AND is_active == 1 ORDER BY name ASC")
+    suspend fun getActiveMembersAsList(query: String): List<MemberEntity>
+
+    @Query("SELECT * FROM member_table WHERE name LIKE '%' || :query || '%' AND is_active == 0 ORDER BY name ASC")
+    fun getInactiveMembers(query: String): PagingSource<Int, MemberEntity>
 
     @Query("SELECT * FROM member_table WHERE is_active = 1")
     fun getActiveParticipant(): Flow<List<MemberEntity>>

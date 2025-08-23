@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fdbb3feccf45f90f9b05fda94fcfcd14",
+    "identityHash": "472b8ca091c66086f0eb9e3ec8c7c752",
     "entities": [
       {
         "tableName": "member_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `phone_number` TEXT, `address` TEXT NOT NULL, `rt` INTEGER NOT NULL, `rw` INTEGER NOT NULL, `description` TEXT NOT NULL, `is_participant` INTEGER NOT NULL, `is_active` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `phone_number` TEXT, `address` TEXT NOT NULL, `rt` INTEGER NOT NULL, `rw` INTEGER NOT NULL, `description` TEXT NOT NULL, `is_participant` INTEGER NOT NULL, `is_cow` INTEGER, `is_active` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -54,6 +54,11 @@
             "columnName": "is_participant",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "isCow",
+            "columnName": "is_cow",
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "isActive",
@@ -133,7 +138,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fdbb3feccf45f90f9b05fda94fcfcd14')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '472b8ca091c66086f0eb9e3ec8c7c752')"
     ]
   }
 }

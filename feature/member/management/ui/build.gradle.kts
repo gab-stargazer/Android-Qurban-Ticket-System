@@ -2,7 +2,9 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.ksp)
     kotlin("plugin.serialization") version "2.1.21"
+
 }
 
 android {
@@ -56,6 +58,8 @@ dependencies {
 
     implementation(platform(libs.arrow.bom))
     implementation(libs.arrow.core)
+    implementation("io.arrow-kt:arrow-optics:2.1.0")
+    ksp("io.arrow-kt:arrow-optics-ksp-plugin:2.1.0")
 
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)

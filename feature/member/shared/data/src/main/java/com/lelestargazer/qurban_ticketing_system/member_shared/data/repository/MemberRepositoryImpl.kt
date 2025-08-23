@@ -7,9 +7,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import arrow.core.Either
+import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.msg_excel_create_invalid_format
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.msg_excel_create_members_failed
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.msg_excel_create_members_success
-import com.lelestargazer.qurban_ticketing_system.member_shared.data.addon.ExcelReader
+import com.lelestargazer.qurban_ticketing_system.member_shared.data.addon.Excel
 import com.lelestargazer.qurban_ticketing_system.member_shared.data.dao.MemberDao
 import com.lelestargazer.qurban_ticketing_system.member_shared.data.entity.MemberEntity
 import com.lelestargazer.qurban_ticketing_system.member_shared.data.entity.toDomain
@@ -23,7 +24,7 @@ import kotlinx.coroutines.flow.map
 
 class MemberRepositoryImpl(
     private val memberDao: MemberDao,
-    private val excelReader: ExcelReader,
+    private val excel: Excel,
     private val context: Context,
 ) : MemberRepository {
 
@@ -35,6 +36,7 @@ class MemberRepositoryImpl(
         address: String,
         description: String,
         isParticipant: Boolean,
+        isCow: Boolean?
     ) {
         memberDao.insertMember(
             MemberEntity(
@@ -45,16 +47,30 @@ class MemberRepositoryImpl(
                 address = address,
                 description = description,
                 isParticipant = isParticipant,
+                isCow = isCow,
                 isActive = true
             )
         )
     }
 
-    override suspend fun createMembersByExcel(uri: Uri): Either<String, String> = Either.catch {
-        val members = excelReader.importMemberFromExcel(uri)
+    override suspend fun exportMembersToExcel(): Either<String, String> = Either.catch {
+        val members = memberDao.getActiveMembersAsList("")
+        excel.exportMemberToExcel(members)
+
+        "Sukses"
+    }.mapLeft {
+        println("Error: ${it.stackTraceToString()}")
+        "Something Wrong"
+    }
+
+    override suspend fun importMembersByExcel(uri: Uri): Either<String,String> = Either.catch {
+        val members = excel.importMemberFromExcel(uri)
+        if(members.isEmpty()) return@catch context.getString(msg_excel_create_invalid_format)
+
         memberDao.insertMembers(members)
         context.getString(msg_excel_create_members_success)
     }.mapLeft {
+        println("Error: ${it.stackTraceToString()}")
         context.getString(msg_excel_create_members_failed)
     }
 
@@ -66,11 +82,11 @@ class MemberRepositoryImpl(
         memberDao.updateMember(member.toEntity())
     }
 
-    override fun getMembers(query: String): Flow<PagingData<Member>> {
+    override fun getActiveMembers(query: String): Flow<PagingData<Member>> {
         return Pager(
             config = PagingConfig(pageSize = 24, prefetchDistance = 12, initialLoadSize = 48),
             pagingSourceFactory = {
-                memberDao.getAllMembers(query)
+                memberDao.getActiveMembers(query)
             }
         ).flow
             .map { it.map(MemberEntity::toDomain) }

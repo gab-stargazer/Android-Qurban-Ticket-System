@@ -15,5 +15,6 @@ data class Member(
     val rw: Int,
     val description: String,
     val isParticipant: Boolean = false,
+    val isCow: Boolean? = null,
     val isActive: Boolean = true,
 )

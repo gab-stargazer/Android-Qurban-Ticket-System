@@ -5,8 +5,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,8 +15,11 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,10 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.R
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.component.ManagementAddEditDialog
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.component.ManagementBottomSheetMenu
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.component.ManagementItem
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.OnBackPressed
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.OnNavigateToAdd
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.OnPressed
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.OnQueryChanged
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.MemberManagementState
@@ -48,10 +53,12 @@ import com.lelestargazer.qurban_ticketing_system.member_management.ui.management
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.ManagementTicketingBanner
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
 import com.lelestargazer.qurban_ticketing_system.theme.QurbanTicketingSystemTheme
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.BottomSheetEvent.OnOpened as OnBottomSheetOpened
 
 /**
  *  This screen is for managing user only, not for ticketing purpose
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManagementScreen(
     state: MemberManagementState,
@@ -66,7 +73,7 @@ fun ManagementScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    onEvent(OnNavigateToAdd)
+                    onEvent(ManagementEvent.OnDialogOpened)
                 }) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -83,6 +90,19 @@ fun ManagementScreen(
                 .padding(innerPadding)
         ) {
 
+            if (state.bottomSheetState.isOpened) {
+                ManagementBottomSheetMenu(
+                    state = state.bottomSheetState,
+                    onEvent = onEvent
+                )
+            }
+
+            if (state.isDialogOpened) {
+                ManagementAddEditDialog(
+                    onEvent = onEvent
+                )
+            }
+
             ManagementTicketingBanner(
                 title = stringResource(id = R.string.tv_management_banner_title),
                 onBack = {
@@ -90,47 +110,67 @@ fun ManagementScreen(
                 }
             )
 
-            TextField(
-                value = state.query,
-                onValueChange = { newQuery ->
-                    onEvent(OnQueryChanged(newQuery))
-                },
-                leadingIcon = {
-                    Icon(
-                        Icons.Default.Search,
-                        null
-                    )
-                },
-                label = {
-                    Text(
-                        stringResource(R.string.form_search_name),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    )
-                },
-                colors = TextFieldDefaults.colors(
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color(0xFFE6E0E9),
-                    focusedLabelColor = Color.Black
-                ),
-                singleLine = true,
-                shape = RoundedCornerShape(25F),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        input?.hide()
-                    }
-                ),
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(screenPadding.horizontal),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = screenPadding.vertical)
                     .padding(horizontal = screenPadding.horizontal)
-                    .border(1.dp, Color.Black, RoundedCornerShape(25F))
-            )
+                    .padding(top = screenPadding.vertical)
+            ) {
+                TextField(
+                    value = state.query,
+                    onValueChange = { newQuery ->
+                        onEvent(OnQueryChanged(newQuery))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Search,
+                            null
+                        )
+                    },
+                    label = {
+                        Text(
+                            stringResource(R.string.form_search_name),
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    },
+                    colors = TextFieldDefaults.colors(
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        focusedContainerColor = Color(0xFFE6E0E9),
+                        focusedLabelColor = Color.Black
+                    ),
+                    singleLine = true,
+                    shape = RoundedCornerShape(25F),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            input?.hide()
+                        }
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .border(1.dp, Color.Black, RoundedCornerShape(25F))
+                )
+
+                Button(
+                    onClick = {
+                        onEvent(OnBottomSheetOpened)
+                    },
+                    contentPadding = PaddingValues(16.dp),
+                    shape = RoundedCornerShape(25F)
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = null
+                    )
+                }
+            }
 
             AnimatedContent(members.loadState.refresh is LoadState.Loading) { isLoading ->
                 when (isLoading) {
@@ -171,7 +211,7 @@ fun ManagementScreen(
                                                     },
                                                     onNavigateToEdit = {
 
-                                                    },
+                                                    }
                                                 )
                                             }
                                         }

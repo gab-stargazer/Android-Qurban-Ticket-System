@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tv_qurban_active_recipient_short">Penerima</string>
-    <string name="tv_qurban_active_participant_short">Peserta</string>
-    <string name="tv_qurban_inactive_recipient_short">Bukan Penerima</string>
-
-    <string name="tv_name">Nama\t:\t%1$s</string>
-    <string name="tv_management_address">Alamat\t:\t%1$s</string>
     <string name="tv_household_size">Jumlah Anggota Keluarga\t:\t%1$s</string>
     <string name="tv_additional_description">Deskripsi Tambahan:\t%1$s</string>
     <string name="tv_phone_number">Nomor HP\t:\t%1$s</string>
@@ -31,4 +25,19 @@
     <string name="error_rt_is_empty">Nomor RT tidak boleh kosong</string>
     <string name="error_address_is_blank">Alamat tidak boleh kosong</string>
     <string name="error_household_size">Jumlah keluarga tidak boleh kurang dari 1</string>
+
+
+    <!--Item-->
+    <string name="tv_recipient">Penerima\nQurban</string>
+    <string name="tv_participant">Peserta\nQurban</string>
+    <string name="tv_inactive">Tidak Aktif</string>
+    <string name="tv_item_name">Nama:</string>
+    <string name="tv_item_address">Alamat:</string>
+    <string name="tv_rt_rw">RT %1$d/RW %2$d</string>
+
+    <!--Bottom Sheet-->
+    <string name="tv_please_wait">Mohon tunggu…</string>
+    <string name="tv_management_menu">Menu Manajemen</string>
+    <string name="tv_import_data">Impor data Peserta/Penerima</string>
+    <string name="tv_export_data">Ekspor data Peserta/Penerima</string>
 </resources>

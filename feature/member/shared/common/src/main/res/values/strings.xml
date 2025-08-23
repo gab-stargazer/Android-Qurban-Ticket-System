@@ -10,6 +10,7 @@
 
 
     <string name="msg_excel_create_members_failed">Member gagal ditambahkan melalui data excel</string>
+    <string name="msg_excel_create_invalid_format">Mohon periksa kembali format Excel yang digunakan</string>
     <string name="msg_excel_create_members_success">Member berhasil ditambahkan melalui data excel</string>
 
 
@@ -24,7 +25,6 @@
     <string name="tv_member_participant">Peserta</string>
     <string name="tv_member_recipient">Penerima</string>
     <string name="tv_form_value">: %1$s</string>
-
 
 
 </resources>

@@ -2,10 +2,18 @@ package com.lelestargazer.qurban_ticketing_system.member_management.ui.managemen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import androidx.paging.PagingData
+import arrow.optics.copy
+import com.lelestargazer.qurban_ticketing_system.common.UiController
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.ManagementEvent.BottomSheetEvent
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.MemberManagementState
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.bottomSheetState
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.isDialogOpened
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.isLoading
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.isOpened
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.openedParticipantIndex
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.state_event.openedParticipantType
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.route.MemberAddEdit
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.route.MemberAddEdit.Type.ADD
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.route.MemberAddEdit.Type.EDIT
@@ -24,7 +32,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ManagementViewModel(
-    private val navController: NavHostController,
+    private val uiController: UiController,
     private val repository: MemberRepository,
 ) : ViewModel() {
 
@@ -32,7 +40,7 @@ class ManagementViewModel(
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     private val _members: Flow<PagingData<Member>> = _searchQuery
-        .flatMapLatest { repository.getMembers(it) }
+        .flatMapLatest { repository.getActiveMembers(it) }
         .debounce(150)
 
     private val _currentState: MutableStateFlow<MemberManagementState> =
@@ -46,7 +54,13 @@ class ManagementViewModel(
             query = query,
             members = _members,
             openedParticipantType = state.openedParticipantType,
-            openedParticipantIndex = state.openedParticipantIndex
+            openedParticipantIndex = state.openedParticipantIndex,
+
+            isBottomSheetOpened = state.isBottomSheetOpened,
+
+            isDialogOpened = state.isDialogOpened,
+
+            bottomSheetState = state.bottomSheetState
         )
     }.stateIn(
         scope = viewModelScope,
@@ -55,36 +69,36 @@ class ManagementViewModel(
     )
 
     fun onEvent(event: ManagementEvent) = viewModelScope.launch {
-        when (event) {
-            is ManagementEvent.OnPressed -> {
-                if (event.index == _currentState.value.openedParticipantIndex) {
-                    _currentState.update {
-                        it.copy(
-                            openedParticipantIndex = null
-                        )
-                    }
-                } else {
-                    _currentState.update {
-                        it.copy(
-                            openedParticipantIndex = event.index
-                        )
-                    }
+        when {
+            event is ManagementEvent.OnPressed -> {
+                _currentState.update { state_ ->
+                    MemberManagementState.openedParticipantIndex.set(
+                        source = state_,
+                        focus =
+                            if (event.index == _currentState.value.openedParticipantIndex) {
+                                null
+                            } else {
+                                event.index
+                            }
+                    )
                 }
             }
 
-            is ManagementEvent.OnQueryChanged -> {
-                _currentState.update {
-                    it.copy(
-                        openedParticipantType = null,
-                        openedParticipantIndex = null
-                    )
+            event is ManagementEvent.OnQueryChanged -> {
+                _currentState.update { state_ ->
+                    with(state_) {
+                        copy {
+                            MemberManagementState.openedParticipantIndex.set(null)
+                            MemberManagementState.openedParticipantType.set(null)
+                        }
+                    }
                 }
 
                 _searchQuery.update { event.query }
             }
 
-            ManagementEvent.OnNavigateToAdd -> {
-                navController.navigate(
+            event is ManagementEvent.OnNavigateToAdd -> {
+                uiController.navController.navigate(
                     MemberAddEdit(
                         type = ADD,
                         participantRecipient = null
@@ -92,8 +106,8 @@ class ManagementViewModel(
                 )
             }
 
-            is ManagementEvent.OnNavigateToEdit -> {
-                navController.navigate(
+            event is ManagementEvent.OnNavigateToEdit -> {
+                uiController.navController.navigate(
                     MemberAddEdit(
                         type = EDIT,
                         participantRecipient = event.participantRecipient
@@ -101,7 +115,70 @@ class ManagementViewModel(
                 )
             }
 
-            ManagementEvent.OnBackPressed -> navController.popBackStack()
+            event is ManagementEvent.OnBackPressed -> uiController.navController.popBackStack()
+
+            event is ManagementEvent.OnDialogDismissed -> _currentState.update {
+                MemberManagementState.isDialogOpened.set(it, false)
+            }
+
+            event is ManagementEvent.OnDialogOpened -> _currentState.update {
+                MemberManagementState.isDialogOpened.set(it, true)
+            }
+
+            event is BottomSheetEvent -> onBottomSheetEvent(event)
+        }
+    }
+
+    private fun onBottomSheetEvent(event: BottomSheetEvent) = viewModelScope.launch {
+        when (event) {
+            BottomSheetEvent.OnExportData -> {
+                repository.exportMembersToExcel()
+            }
+
+            is BottomSheetEvent.OnImportData -> {
+                _currentState.update {
+                    MemberManagementState.bottomSheetState.isLoading.set(
+                        it,
+                        true
+                    )
+                }
+
+                repository.importMembersByExcel(
+                    uri = event.uri
+                ).fold(
+                    ifLeft = {
+                        _currentState.update {
+                            MemberManagementState.bottomSheetState.set(
+                                it,
+                                MemberManagementState.BottomSheetState()
+                            )
+                        }
+                        uiController.snackBarHost.showSnackbar(it)
+                    }, ifRight = {
+                        _currentState.update {
+                            MemberManagementState.bottomSheetState.set(
+                                it,
+                                MemberManagementState.BottomSheetState()
+                            )
+                        }
+                        uiController.snackBarHost.showSnackbar(it)
+                    }
+                )
+            }
+
+            BottomSheetEvent.OnOpened -> _currentState.update {
+                MemberManagementState.bottomSheetState.isOpened.set(
+                    source = it,
+                    focus = true
+                )
+            }
+
+            BottomSheetEvent.OnDismissed -> _currentState.update {
+                MemberManagementState.bottomSheetState.isOpened.set(
+                    source = it,
+                    focus = false
+                )
+            }
         }
     }
 }

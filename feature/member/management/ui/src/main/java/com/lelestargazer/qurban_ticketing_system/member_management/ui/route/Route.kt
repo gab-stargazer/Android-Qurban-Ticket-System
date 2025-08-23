@@ -9,6 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.lelestargazer.qurban_ticketing_system.common.UiController
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.add_edit.AddEditScreen
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.add_edit.AddEditViewmodel
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.add_edit.navType
@@ -20,6 +21,7 @@ import com.lelestargazer.qurban_ticketing_system.member_shared.common.MemberRout
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.MemberRoute.Management
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Member
 import com.lelestargazer.qurban_ticketing_system.theme.LocalParentNavigator
+import com.lelestargazer.qurban_ticketing_system.theme.LocalSnackbarHost
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -41,10 +43,15 @@ data class MemberAddEdit(
 fun NavGraphBuilder.managementRoute() {
     composable<Management> {
         val navController = LocalParentNavigator.current
+        val snackbarHost = LocalSnackbarHost.current
+
         val vm: ManagementViewModel = koinViewModel(
             parameters = {
                 parametersOf(
-                    navController
+                    UiController(
+                        navController,
+                        snackbarHost
+                    )
                 )
             }
         )

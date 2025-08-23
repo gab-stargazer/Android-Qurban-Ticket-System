@@ -3,6 +3,7 @@ package com.lelestargazer.qurban_ticketing_system.member_management.ui.managemen
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PersonOff
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,16 +33,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.R
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.tv_additional_description
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.tv_management_address
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.tv_household_size
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.tv_qurban_active_participant_short
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.tv_qurban_active_recipient_short
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.tv_qurban_inactive_recipient_short
-import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.msg_member_participant
-import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.msg_member_recipient
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.tv_item_address
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.tv_item_name
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Member
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
 
@@ -92,8 +91,8 @@ fun LazyItemScope.ManagementItem(
 
                 when (member.isParticipant) {
                     true -> Text(
-                        text = stringResource(tv_qurban_active_participant_short),
-                        style = MaterialTheme.typography.bodySmall.copy(
+                        text = stringResource(R.string.tv_participant),
+                        style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
                         textAlign = TextAlign.Center
@@ -101,10 +100,10 @@ fun LazyItemScope.ManagementItem(
 
                     false -> Text(
                         when (member.isActive) {
-                            true -> stringResource(tv_qurban_active_recipient_short)
-                            false -> stringResource(tv_qurban_inactive_recipient_short)
+                            true -> stringResource(R.string.tv_recipient)
+                            false -> stringResource(R.string.tv_inactive)
                         },
-                        style = MaterialTheme.typography.bodySmall.copy(
+                        style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
                         textAlign = TextAlign.Center
@@ -114,28 +113,59 @@ fun LazyItemScope.ManagementItem(
 
             Column(
                 modifier = Modifier
-                    .weight(3f)
+                    .weight(4f)
                     .padding(horizontal = 4.dp)
             ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = stringResource(tv_item_name),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        modifier = Modifier.weight(1F)
+                    )
 
-                Text(
-                    text = stringResource(R.string.tv_management_name, member.name),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
-                Text(
-                    text = stringResource(
-                        R.string.tv_management_status,
-                        stringResource(
-                            if (member.isParticipant) {
-                                msg_member_participant
+                    Text(
+                        member.name,
+                        maxLines =
+                            if (isParticipantSelected) {
+                                Int.MAX_VALUE
                             } else {
-                                msg_member_recipient
-                            }
-                        )
-                    ),
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                                1
+                            },
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .weight(3F)
+                            .animateContentSize()
+                    )
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = stringResource(tv_item_address),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        modifier = Modifier.weight(1F)
+                    )
+
+                    Text(
+                        member.address.ifBlank {
+                            stringResource(
+                                R.string.tv_rt_rw,
+                                member.rt,
+                                member.rw
+                            )
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(3F)
+                    )
+                }
             }
 
             Box(
@@ -178,8 +208,7 @@ fun LazyItemScope.ManagementItem(
                 ) {
                     Text(
                         text = stringResource(
-                            tv_management_address,
-                            member.address
+                            tv_item_address
                         ),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.fillMaxWidth()
@@ -222,5 +251,7 @@ fun LazyItemScope.ManagementItem(
                 }
             }
         }
+
+        HorizontalDivider(modifier = Modifier.padding(horizontal = screenPadding.horizontal))
     }
 }

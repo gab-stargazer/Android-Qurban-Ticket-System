@@ -13,7 +13,7 @@ class ImportExportViewModel(
 
     fun onEvent(event: ImportExportEvent) = viewModelScope.launch {
         when (event) {
-            is ImportExportEvent.CreateMembersByExcel -> memberRepository.createMembersByExcel(event.uri)
+            is ImportExportEvent.CreateMembersByExcel -> memberRepository.importMembersByExcel(event.uri)
         }
     }
 }
