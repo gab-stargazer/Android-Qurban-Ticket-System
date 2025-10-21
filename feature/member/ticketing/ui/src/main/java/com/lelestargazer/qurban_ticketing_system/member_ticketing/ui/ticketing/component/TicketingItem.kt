@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.tv_form_value
-import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.tv_member_description
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.CouponRedeemStatus
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.MemberAndCoupon
 import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.R
@@ -88,31 +87,6 @@ fun LazyItemScope.TicketingItem(
                         ),
                         modifier = Modifier.weight(2F)
                     )
-                    Text(
-                        text = stringResource(
-                            tv_form_value,
-                            member.address.ifBlank { "RT${member.rt} / RW${member.rw}" }
-                        ),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.weight(6F)
-                    )
-                }
-
-                if (member.description.isNotBlank()) {
-                    Row {
-                        Text(
-                            text = stringResource(tv_member_description),
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                fontWeight = FontWeight.SemiBold
-                            ),
-                            modifier = Modifier.weight(2F)
-                        )
-                        Text(
-                            text = stringResource(tv_form_value, member.description),
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.weight(6F)
-                        )
-                    }
                 }
             }
             VerticalDivider()

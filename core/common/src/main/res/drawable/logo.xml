@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="500dp"
+    android:height="500dp"
+    android:viewportWidth="500"
+    android:viewportHeight="500">
+    <!-- Background rectangle -->
+    <path
+        android:pathData="M0,500 L0,0 L500,0 L500,500 Z"
+        android:fillColor="#434343" />
+    <!-- First path (outer shape) -->
+    <path
+        android:pathData="M293.884,173.747 C285.247,173.747 278.245,166.745 278.245,158.108 L278.245,111.345 L346.716,173.747 L293.884,173.747 Z"
+        android:fillColor="#434343" />
+    <!-- Second path (main shape) -->
+    <path
+        android:pathData="M283.302,88.235 L155.773,88.235 C138.422,88.235 124.339,102.319 124.339,119.670 L124.339,380.330 C124.339,397.681 138.422,411.765 155.773,411.765 L340.258,411.765 C357.610,411.765 371.693,397.681 371.693,380.330 L371.693,176.471 L283.302,88.235 Z"
+        android:fillColor="#434343" />
+    <!-- Inner white shape -->
+    <path
+        android:pathData="M280.112,278.011 L280.112,231.092 L215.920,231.092 L215.920,278.011 L190.321,278.011 L247.977,337.613 L305.711,278.011 L280.112,278.011 Z"
+        android:fillColor="#FFFFFF" />
+</vector>

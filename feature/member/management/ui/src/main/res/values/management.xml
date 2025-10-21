@@ -5,4 +5,12 @@
     <string name="tv_management_status">Status: %1$s</string>
     <string name="tv_management_rt_rw">Rt/RW: %1$s</string>
     <string name="tv_management_description">Keterangan\t: %1$s</string>
+
+    <!--Member-->
+    <string name="tv_management_phone_number">No. Telepon : %1$s</string>
+    <string name="tv_management_address">Alamat : %1$s</string>
+
+    <!--Button-->
+    <string name="btn_management_add_member">Tambahkan Peserta/Penerima</string>
+    <string name="btn_import_data">Impor Data Peserta/Penerima</string>
 </resources>

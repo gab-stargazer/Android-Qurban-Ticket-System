@@ -8,23 +8,13 @@ plugins {
 
 android {
     namespace = "com.lelestargazer.qurban_ticketing_system.member_ticketing.ui"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
     }
 
     compileOptions {
@@ -63,10 +53,8 @@ dependencies {
 
     //  Koin
     implementation(platform(libs.koin.bom))
-    implementation(libs.koin.android)
-    implementation(libs.koin.core)
-    implementation(libs.koin.compose)
-    implementation(libs.koin.compose.navigation)
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.koin.compose)
 
     val nav_version = "2.9.0"
 

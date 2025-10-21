@@ -8,23 +8,13 @@ plugins {
 
 android {
     namespace = "com.lelestargazer.qurban_ticketing_system.participant_management_system.ui"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
     }
 
     compileOptions {
@@ -86,5 +76,8 @@ dependencies {
 
     implementation ("com.google.accompanist:accompanist-permissions:0.37.3")
     implementation("io.github.g00fy2.quickie:quickie-bundled:1.11.0")
+
+    implementation("io.github.crispindeity:kotlin-snowflake:1.0.1")
+
 
 }

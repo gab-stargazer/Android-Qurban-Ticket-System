@@ -24,10 +24,6 @@
             <option value="$PROJECT_DIR$/feature/member/shared/domain" />
             <option value="$PROJECT_DIR$/feature/member/ticketing" />
             <option value="$PROJECT_DIR$/feature/member/ticketing/ui" />
-            <option value="$PROJECT_DIR$/feature/participant_management_system" />
-            <option value="$PROJECT_DIR$/feature/participant_management_system/data" />
-            <option value="$PROJECT_DIR$/feature/participant_management_system/domain" />
-            <option value="$PROJECT_DIR$/feature/participant_management_system/ui" />
           </set>
         </option>
       </GradleProjectSettings>

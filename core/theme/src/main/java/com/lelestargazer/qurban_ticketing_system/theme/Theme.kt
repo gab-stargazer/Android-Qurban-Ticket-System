@@ -1,14 +1,19 @@
 package com.lelestargazer.qurban_ticketing_system.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.ui.theme.Typography
 
 private val lightScheme = lightColorScheme(
@@ -252,6 +257,7 @@ val unspecified_scheme = ColorFamily(
 )
 
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun QurbanTicketingSystemTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -260,13 +266,20 @@ fun QurbanTicketingSystemTheme(
     content: @Composable () -> Unit,
 ) {
 
+    val navController: NavHostController = rememberNavController()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     CompositionLocalProvider(
-        LocalScreenPadding provides CustomPadding(
-            horizontal = 16.dp,
-            vertical = 12.dp
-        )
+        LocalScreenPadding provides
+                CustomPadding(
+                    horizontal = 16.dp,
+                    vertical = 12.dp
+                ),
+
+        LocalParentNavigator provides navController,
+        LocalSnackbarHost provides snackbarHostState
     ) {
-        MaterialTheme(
+        MaterialExpressiveTheme(
             colorScheme = lightScheme,
             typography = Typography,
             content = content

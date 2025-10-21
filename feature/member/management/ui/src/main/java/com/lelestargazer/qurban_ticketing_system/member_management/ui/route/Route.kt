@@ -10,13 +10,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.lelestargazer.qurban_ticketing_system.common.UiController
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.add_edit.AddEditScreen
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.add_edit.AddEditViewmodel
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.add_edit.navType
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.import_export.ImportExportScreen
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.import_export.ImportExportViewModel
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.screen.ManagementScreen
-import com.lelestargazer.qurban_ticketing_system.member_management.ui.management.viewmodel.ManagementViewModel
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.navType
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.add_edit.AddEditScreen
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.add_edit.AddEditViewmodel
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.ManagementScreen
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.ManagementViewModel
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.MemberRoute.ImportExport
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.MemberRoute.Management
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Member
@@ -29,13 +29,13 @@ import kotlin.reflect.typeOf
 
 @Serializable
 data class MemberAddEdit(
-    val type: Type,
+    val screenType: ScreenType,
     val participantRecipient: Member?,
 
     ) {
 
     @Keep
-    enum class Type {
+    enum class ScreenType {
         ADD, EDIT
     }
 }
@@ -66,7 +66,7 @@ fun NavGraphBuilder.managementRoute() {
 
     composable<MemberAddEdit>(
         typeMap = mapOf(
-            typeOf<MemberAddEdit.Type>() to NavType.EnumType(MemberAddEdit.Type::class.java),
+            typeOf<MemberAddEdit.ScreenType>() to NavType.EnumType(MemberAddEdit.ScreenType::class.java),
             typeOf<Member?>() to navType
         )
     ) {
@@ -77,7 +77,7 @@ fun NavGraphBuilder.managementRoute() {
             koinViewModel(
                 parameters = {
                     parametersOf(
-                        args.type,
+                        args.screenType,
                         args.participantRecipient,
                         navController
                     )

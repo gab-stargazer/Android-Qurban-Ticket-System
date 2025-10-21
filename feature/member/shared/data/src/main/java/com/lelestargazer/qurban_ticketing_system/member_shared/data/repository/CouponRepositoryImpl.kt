@@ -28,15 +28,21 @@ import com.lelestargazer.qurban_ticketing_system.member_shared.data.entity.toEnt
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Coupon
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.CouponRedeemStatus
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.MemberAndCoupon
+import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.QurbanStatus
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.repository.CouponRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 import org.kotlincrypto.hash.sha3.SHA3_256
 import java.util.Calendar
 import java.util.UUID
 
+@Single(
+    binds = [CouponRepository::class],
+    createdAtStart = true
+)
 class CouponRepositoryImpl(
     private val couponDao: CouponDao,
     private val qrGenerator: QRGenerator,
@@ -139,7 +145,7 @@ class CouponRepositoryImpl(
             it.coupon as CouponEntity
 
             val couponStatus =
-                if (it.member.isParticipant) {
+                if (it.member.status == QurbanStatus.Participant) {
                     context.getString(msg_member_participant)
                 } else {
                     context.getString(msg_member_recipient)

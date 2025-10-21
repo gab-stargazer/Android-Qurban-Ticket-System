@@ -7,23 +7,13 @@ plugins {
 
 android {
     namespace = "com.lelestargazer.qurban_ticketing_system.member_shared.data"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
     }
 
     compileOptions {
@@ -59,6 +49,12 @@ dependencies {
     //  Itext
     implementation(libs.itext)
 
+    //  Koin
+    implementation(platform(libs.koin.bom))
+    implementation(libs.bundles.koin)
+    implementation(libs.koin.workmanager)
+    ksp(libs.koin.annotation.ksp)
+
     //  Paging
     implementation(libs.paging)
 
@@ -73,12 +69,14 @@ dependencies {
     implementation(libs.room.paging)
     ksp(libs.room.compiler)
 
-    //  Koin
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.android)
-    implementation(libs.koin.core)
+    //  Workmanager
+    implementation(libs.workmanager)
+
+
 
     implementation(platform("org.kotlincrypto.hash:bom:0.7.0"))
     implementation("org.kotlincrypto.hash:sha3")
     implementation("com.google.zxing:core:3.4.0")
+
+    implementation("io.github.crispindeity:kotlin-snowflake:1.0.1")
 }

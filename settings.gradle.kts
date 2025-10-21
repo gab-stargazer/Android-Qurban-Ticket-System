@@ -23,9 +23,6 @@ dependencyResolutionManagement {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "Qurban-Ticketing-System"
 include(":app")
-include(":feature:participant_management_system:ui")
-include(":feature:participant_management_system:domain")
-include(":feature:participant_management_system:data")
 include(":core:theme")
 include(":core:common")
 include(":feature:member:management:ui")

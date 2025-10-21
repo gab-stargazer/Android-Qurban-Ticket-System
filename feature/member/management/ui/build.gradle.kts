@@ -9,23 +9,13 @@ plugins {
 
 android {
     namespace = "com.lelestargazer.qurban_ticketing_system.member_management.ui"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
     }
 
     compileOptions {
@@ -56,20 +46,23 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    //  Accompanist
+    implementation(libs.accompanist.permission)
+
+    //  Arrow
     implementation(platform(libs.arrow.bom))
     implementation(libs.arrow.core)
-    implementation("io.arrow-kt:arrow-optics:2.1.0")
-    ksp("io.arrow-kt:arrow-optics-ksp-plugin:2.1.0")
+    implementation(libs.arrow.optic)
+    ksp(libs.arrow.optic.ksp)
 
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
 
     //  Koin
     implementation(platform(libs.koin.bom))
-    implementation(libs.koin.android)
-    implementation(libs.koin.core)
-    implementation(libs.koin.compose)
-    implementation(libs.koin.compose.navigation)
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.koin.compose)
+    ksp(libs.koin.annotation.ksp)
 
     val nav_version = "2.9.0"
 
@@ -79,4 +72,7 @@ dependencies {
     //  Paging
     implementation(libs.paging)
     implementation(libs.paging.compose)
+
+    implementation("io.github.crispindeity:kotlin-snowflake:1.0.1")
+
 }

@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,18 +24,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.currentStateAsState
+import com.lelestargazer.qurban_ticketing_system.common.R.string.btn_back
 import com.lelestargazer.qurban_ticketing_system.common.R.string.tv_title_app_name
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.R
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ManagementTicketingBanner(
     title: String,
-    onBack: () -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val screenPadding = LocalScreenPadding.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycle by lifecycleOwner.lifecycle.currentStateAsState()
+
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier
@@ -52,10 +61,9 @@ fun ManagementTicketingBanner(
 
             Text(
                 text = title,
+                textAlign = TextAlign.End,
                 style = MaterialTheme.typography.titleMedium.copy(
-                    fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.End,
                     color = Color.White
                 ),
                 modifier = Modifier.padding(
@@ -73,19 +81,35 @@ fun ManagementTicketingBanner(
                 .padding(end = screenPadding.horizontal)
                 .padding(top = screenPadding.vertical)
         ) {
-            IconButton(
-                onClick = onBack
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
+                IconButton(
+                    onClick = {
+                        if (lifecycle.isAtLeast(Lifecycle.State.RESUMED)) {
+                            onBackPressed()
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+
+                Text(
+                    text = stringResource(id = btn_back),
+                    style = MaterialTheme.typography.titleSmallEmphasized.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    )
                 )
             }
 
             Text(
                 stringResource(tv_title_app_name),
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.End,
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White

@@ -22,7 +22,6 @@ interface CouponDao {
             LEFT JOIN coupon_table coupon 
             ON member.id = coupon.member_id 
             AND coupon.coupon_year = :currentYear
-            WHERE member.is_active = 1
             ORDER BY name
        """
     )
@@ -38,7 +37,6 @@ interface CouponDao {
             JOIN coupon_table coupon 
             ON member.id = coupon.member_id 
             AND coupon.hash_code = :hash
-            WHERE member.is_active = 1
             ORDER BY name
        """
     )
@@ -52,7 +50,7 @@ interface CouponDao {
             JOIN coupon_table coupon 
             ON member.id = coupon.member_id 
             AND coupon.coupon_year = :currentYear AND coupon.claim_status == "NOT_CLAIMED"
-            WHERE member.is_active = 1 AND member.name LIKE '%' || :query || '%' 
+            WHERE member.name LIKE '%' || :query || '%' 
             ORDER BY name
        """
     )
@@ -69,7 +67,7 @@ interface CouponDao {
             LEFT JOIN coupon_table coupon 
             ON member.id = coupon.member_id 
             AND coupon.coupon_year = :currentYear
-            WHERE member.is_active = 1 AND member.name LIKE '%' || :query || '%' 
+            WHERE member.name LIKE '%' || :query || '%' 
             ORDER BY name
        """
     )
@@ -86,7 +84,6 @@ interface CouponDao {
             JOIN coupon_table coupon 
             ON member.id = coupon.member_id 
             AND coupon.coupon_year = :currentYear AND coupon.claim_status == "NOT_CLAIMED"
-            WHERE member.is_active = 1
             ORDER BY name
        """
     )

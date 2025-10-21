@@ -11,7 +11,21 @@
     <string name="tv_qurban_active_recipient">Penerima Qurban Aktif</string>
     <string name="tv_qurban_inactive_recipient">Bukan Penerima Qurban (Bukan Warga)</string>
 
+    <!--Form Label-->
+    <string name="label_phone_number">No. Telepon (Opsional)</string>
+    <string name="label_address">Alamat (Opsional)</string>
+    <string name="label_qurban_status">Status Peserta/Penerima</string>
+    <string name="label_qurban_type">Jenis Qurban</string>
+
+    <!--Form Value-->
+    <string name="form_qurban_status_recipient">Penerima Qurban</string>
+    <string name="form_qurban_status_participant">Peserta Qurban</string>
+    <string name="form_qurban_type_cow">Sapi</string>
+    <string name="form_qurban_type_goat">Kambing</string>
+    <string name="form_qurban_type_sheep">Domba</string>
+
     <!--Btn-->
-    <string name="btn_add_participant">Tambahkan Peserta</string>
-    <string name="btn_edit_participant">Ubah Data Peserta</string>
+    <string name="btn_add_member">Tambahkan Data</string>
+    <string name="btn_edit_member">Ubah Data</string>
+    <string name="btn_delete_member">Hapus Data</string>
 </resources>

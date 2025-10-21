@@ -27,7 +27,7 @@ data class CouponEntity(
     val couponID: UUID,
 
     @ColumnInfo("member_id")
-    val participantID: UUID,
+    val participantID: Long,
 
     @ColumnInfo("member_name")
     val memberName: String,

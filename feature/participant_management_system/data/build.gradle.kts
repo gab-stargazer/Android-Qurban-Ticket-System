@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.lelestargazer.qurban_ticketing_system.participant_management_system.data"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
@@ -15,19 +15,11 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -53,12 +45,15 @@ dependencies {
     implementation(libs.room)
     ksp(libs.room.compiler)
 
-    implementation(platform("org.kotlincrypto.hash:bom:0.7.0"))
+    implementation(platform("org.kotlincrypto.hash:bom:0.8.0"))
     implementation("org.kotlincrypto.hash:sha3")
-    implementation("com.google.zxing:core:3.4.0")
+    implementation("com.google.zxing:core:3.5.3")
     implementation("io.github.g0dkar:qrcode-kotlin:4.4.1")
-    implementation("com.itextpdf:itext7-core:7.2.5")
+    implementation(libs.itext)
 
     implementation(platform(libs.arrow.bom))
     implementation(libs.arrow.core)
+
+    implementation("io.github.crispindeity:kotlin-snowflake:1.0.1")
+
 }

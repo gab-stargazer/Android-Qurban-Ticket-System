@@ -3,6 +3,7 @@
     <string name="msg_coupon_successfully_claimed">Kupon berhasil digunakan</string>
     <string name="msg_member_successfully_added">Peserta/Penerima berhasil ditambahkan</string>
     <string name="msg_member_successfully_edited">Peserta/Penerima berhasil diubah</string>
+    <string name="msg_we_will_notify_when_import_finished">Anda akan diberi notifikasi ketika proses selesai</string>
 
     <string name="msg_member_participant">Peserta</string>
     <string name="msg_member_recipient">Penerima</string>
@@ -14,7 +15,13 @@
     <string name="msg_excel_create_members_success">Member berhasil ditambahkan melalui data excel</string>
 
 
+    <!--Text-->
     <string name="tv_no_data">Peserta/Penerima tidak ditemukan</string>
+    <string name="tv_contact_by_number">Hubungi Peserta/Penerima</string>
+
+    <!--Button-->
+    <string name="btn_whatsapp">Whatsapp</string>
+    <string name="btn_phone">Telpon</string>
 
     <!--Form-->
     <string name="tv_member_search">Cari Peserta/Penerima</string>
@@ -24,7 +31,10 @@
     <string name="tv_member_description">Catatan</string>
     <string name="tv_member_participant">Peserta</string>
     <string name="tv_member_recipient">Penerima</string>
+
     <string name="tv_form_value">: %1$s</string>
 
-
+    <!--Permission-->
+    <string name="permission_title_notification">Izin Notifikasi diperlukan (Opsional)</string>
+    <string name="permission_body_notification">Izin Notifikasi diperlukan agar dapat mengirimkan pemberitahuan kepada anda ketika proses selesai dilakukan. Anda dapat menolak izin dan proses tetap akan dilanjutkan, namun kami tidak akan dapat memberikan pemberitahuan kepada anda ketika proses selesai</string>
 </resources>

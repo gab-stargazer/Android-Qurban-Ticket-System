@@ -52,7 +52,6 @@ class QRGenerator {
 
                 val couponStatus = Text(qrData.couponStatus + "\n")
                     .setFontSize(10F)
-                    .setBold()
 
                 val paragraph = Paragraph()
                     .add(image)

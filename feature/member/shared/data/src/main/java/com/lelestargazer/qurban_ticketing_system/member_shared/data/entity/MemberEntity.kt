@@ -4,14 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Member
-import java.util.UUID
+import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.QurbanStatus
+import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.QurbanType
 
 @Entity(tableName = "member_table")
 data class MemberEntity(
 
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: UUID = UUID.randomUUID(),
+    val id: Long,
 
     @ColumnInfo(name = "name")
     val name: String,
@@ -20,25 +21,13 @@ data class MemberEntity(
     val phone: String?,
 
     @ColumnInfo(name = "address")
-    val address: String,
+    val address: String?,
 
-    @ColumnInfo(name = "rt")
-    val rt: Int,
+    @ColumnInfo(name = "status")
+    val status: QurbanStatus,
 
-    @ColumnInfo(name = "rw")
-    val rw: Int,
-
-    @ColumnInfo(name = "description")
-    val description: String,
-
-    @ColumnInfo(name = "is_participant")
-    val isParticipant: Boolean,
-
-    @ColumnInfo(name = "is_cow")
-    val isCow: Boolean?,
-
-    @ColumnInfo(name = "is_active")
-    val isActive: Boolean,
+    @ColumnInfo(name = "type")
+    val type: QurbanType?
 )
 
 fun MemberEntity.toDomain(): Member =
@@ -47,12 +36,8 @@ fun MemberEntity.toDomain(): Member =
         name = name,
         phoneNumber = phone,
         address = address,
-        rt = rt,
-        rw = rw,
-        description = description,
-        isParticipant = isParticipant,
-        isCow = isCow,
-        isActive = isActive
+        status = status,
+        type = type,
     )
 
 fun Member.toEntity(): MemberEntity =
@@ -61,10 +46,6 @@ fun Member.toEntity(): MemberEntity =
         name = name,
         phone = phoneNumber,
         address = address,
-        rt = rt,
-        rw = rw,
-        description = description,
-        isParticipant = isParticipant,
-        isCow = isCow,
-        isActive = isActive
+        status = status,
+        type = type,
     )

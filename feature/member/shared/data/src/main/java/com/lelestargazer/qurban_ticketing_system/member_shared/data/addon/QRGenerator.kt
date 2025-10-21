@@ -21,11 +21,13 @@ import com.itextpdf.layout.properties.HorizontalAlignment
 import com.itextpdf.layout.properties.TextAlignment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 import qrcode.QRCode
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.Calendar
 
+@Single
 class QRGenerator {
 
     suspend fun saveCoupons(qrDataList: List<QRGeneratorData>) {
@@ -43,7 +45,8 @@ class QRGenerator {
             qrDataList.chunked(16).forEach { chunk ->
                 val table = Table(4)
                 chunk.forEachIndexed { index, qrData ->
-                    // Generate smaller QR code (size 25 instead of 50)
+
+                    // Generate QR code
                     val qrCode = QRCode.ofRoundedSquares()
                         .withSize(25)
                         .build(qrData.qrCode)
@@ -62,7 +65,7 @@ class QRGenerator {
                     // Create image data from compressed bytes
                     val imageData = ImageDataFactory.create(compressedBytes)
                     val image = Image(imageData)
-                        .scaleToFit(100F, 100F) // Reduced from 120F to 100F
+                        .scaleToFit(100F, 100F)
                         .setMargins(10F, 10F, 5F, 10F)
 
                     // Clean up
@@ -71,7 +74,6 @@ class QRGenerator {
 
                     val couponStatus = Text(qrData.couponStatus + "\n")
                         .setFontSize(10F)
-                        .setBold()
 
                     val paragraph = Paragraph()
                         .add(image)

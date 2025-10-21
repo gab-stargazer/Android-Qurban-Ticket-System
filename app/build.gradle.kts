@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.ksp)
     kotlin("plugin.serialization") version "2.1.21"
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
@@ -9,12 +10,12 @@ plugins {
 
 android {
     namespace = "com.lelestargazer.qurban_ticketing_system"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.lelestargazer.qurban_ticketing_system"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -23,13 +24,14 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -43,6 +45,10 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        resources.excludes.add("META-INF/DEPENDENCIES")
+    }
 }
 
 dependencies {
@@ -50,8 +56,6 @@ dependencies {
     // Feature
     implementation(projects.core.common)
     implementation(projects.core.theme)
-    implementation(projects.feature.participantManagementSystem.data)
-    implementation(projects.feature.participantManagementSystem.ui)
 
 
 
@@ -59,11 +63,6 @@ dependencies {
     implementation(projects.feature.member.shared.data)
     implementation(projects.feature.member.management.ui)
     implementation(projects.feature.member.ticketing.ui)
-
-
-
-    // Participant Management
-//    implementation(projects.feature.participantManagement.ui)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -83,17 +82,18 @@ dependencies {
 
 
     implementation(platform(libs.koin.bom))
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.koin.compose)
+    implementation(libs.koin.workmanager)
+    ksp(libs.koin.annotation.ksp)
 
     val nav_version = "2.9.0"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
-    implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-crashlytics")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.bundles.firebase)
 
     implementation ("com.google.accompanist:accompanist-permissions:0.37.3")
 }

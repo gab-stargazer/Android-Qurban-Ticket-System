@@ -4,7 +4,7 @@ import java.util.UUID
 
 data class Coupon(
     val couponID: UUID,
-    val participantID: UUID,
+    val participantID: Long,
     val participantName: String,
     val year: Int,
     val hashCode: String,

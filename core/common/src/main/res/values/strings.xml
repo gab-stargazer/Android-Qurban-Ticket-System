@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tv_title_app_name">Idul Adha\nApps</string>
+
+    <!--Button-->
+    <string name="btn_back">Kembali</string>
+    <string name="btn_give_permission">Berikan Izin</string>
+    <string name="btn_continue_without_permission">Lanjutkan tanpa izin</string>
+
+    <!--Message-->
 </resources>

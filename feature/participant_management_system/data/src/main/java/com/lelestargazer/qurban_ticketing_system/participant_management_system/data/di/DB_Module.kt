@@ -12,19 +12,3 @@ import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-val dbModule = module {
-    single<RoomDB>(createdAtStart = true) {
-        Room.databaseBuilder(androidContext(), RoomDB::class.java, "qurban-db").build()
-    }
-
-    single<ParticipantDao> {
-        get<RoomDB>().participantDao()
-    }
-
-    single<TicketDao> {
-        get<RoomDB>().ticketDao()
-    }
-
-    singleOf(::MemberRepositoryImpl) { bind<MemberRepository>() }
-    singleOf(::QRGenerator)
-}

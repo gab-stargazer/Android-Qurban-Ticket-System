@@ -72,6 +72,7 @@ import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.t
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.ManagementTicketingBanner
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Coupon
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.CouponRedeemStatus
+import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.QurbanStatus
 import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.R
 import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.TicketingEvent.OnBackPressed
 import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.TicketingEvent.OnBottomSheetDismissed
@@ -103,6 +104,8 @@ fun TicketingScreen(
         )
     )
 
+
+    //  TODO: Handle API 32
     val manageAllFilePermission =
         rememberPermissionState(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
 
@@ -200,7 +203,7 @@ fun TicketingScreen(
                         ) {
 
                             val memberType =
-                                if (selectedMember.isParticipant) {
+                                if (selectedMember.status == QurbanStatus.Participant) {
                                     stringResource(tv_member_participant)
                                 } else {
                                     stringResource(tv_member_recipient)
@@ -248,29 +251,6 @@ fun TicketingScreen(
                                     modifier = Modifier.weight(6F)
                                 )
                             }
-
-                            if (selectedMember.description.isNotBlank()) {
-                                Row {
-                                    Text(
-                                        text = stringResource(
-                                            R.string.tv_member_ticketing_description,
-                                            memberType
-                                        ), style = MaterialTheme.typography.bodyMedium.copy(
-                                            fontWeight = FontWeight.SemiBold
-                                        ),
-                                        modifier = Modifier.weight(4F)
-                                    )
-
-                                    Text(
-                                        text = stringResource(
-                                            tv_form_value,
-                                            selectedMember.description
-                                        ),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        modifier = Modifier.weight(6F)
-                                    )
-                                }
-                            }
                         }
 
                         Column(
@@ -315,7 +295,7 @@ fun TicketingScreen(
         ) {
             ManagementTicketingBanner(
                 title = "",
-                onBack = {
+                onBackPressed = {
                     onEvent(OnBackPressed)
                 }
             )
