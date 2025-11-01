@@ -13,4 +13,9 @@
     <!--Button-->
     <string name="btn_management_add_member">Tambahkan Peserta/Penerima</string>
     <string name="btn_import_data">Impor Data Peserta/Penerima</string>
+
+    <!--Filter-->
+    <string name="filter_type_all">Semua</string>
+    <string name="filter_type_participant">Peserta</string>
+    <string name="filter_type_recipient">Penerima</string>
 </resources>

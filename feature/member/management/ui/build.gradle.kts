@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.arrow.optic)
     ksp(libs.arrow.optic.ksp)
 
+    //  Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
 
@@ -64,14 +65,12 @@ dependencies {
     implementation(libs.bundles.koin.compose)
     ksp(libs.koin.annotation.ksp)
 
-    val nav_version = "2.9.0"
-
-    implementation("androidx.navigation:navigation-compose:$nav_version")
-    implementation(libs.serialization)
-
     //  Paging
     implementation(libs.paging)
     implementation(libs.paging.compose)
+
+    //  Serialization
+    implementation(libs.serialization)
 
     implementation("io.github.crispindeity:kotlin-snowflake:1.0.1")
 

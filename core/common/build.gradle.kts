@@ -37,18 +37,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.graphics)
-    implementation(libs.compose.ui.tooling)
-    implementation(libs.compose.ui.tooling.preview)
 
+    //  Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
-
-    val nav_version = "2.9.0"
-
-    implementation("androidx.navigation:navigation-compose:$nav_version")
 
     implementation(libs.serialization)
 }

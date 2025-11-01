@@ -43,7 +43,4 @@ dependencies {
 
     //  Paging
     implementation(libs.paging)
-
-    implementation("io.github.crispindeity:kotlin-snowflake:1.0.1")
-
 }

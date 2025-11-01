@@ -113,14 +113,9 @@ fun ManagementScreen(
         rememberPermissionState(
             permission = Manifest.permission.POST_NOTIFICATIONS,
             onPermissionResult = { isGranted ->
-                if (isGranted) {
-                    excelSelectionLauncher.launch(arrayOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                } else {
-                    //TODO: Fix later
-                }
+                excelSelectionLauncher.launch(arrayOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
             }
         )
-
 
     if (state.isNotificationPermissionDialogOpened) {
         NotificationPermissionDialog(
@@ -301,7 +296,7 @@ fun ManagementScreen(
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        filterType.name,
+                                        text = stringResource(filterType.uiText),
                                         style = MaterialTheme.typography.bodySmallEmphasized.copy(
                                             fontWeight = FontWeight.SemiBold
                                         )

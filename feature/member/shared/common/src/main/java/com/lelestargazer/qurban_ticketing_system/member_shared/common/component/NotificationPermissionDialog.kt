@@ -10,9 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.lelestargazer.qurban_ticketing_system.common.R.string.btn_continue_without_permission
 import com.lelestargazer.qurban_ticketing_system.common.R.string.btn_give_permission
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.R
+import com.lelestargazer.qurban_ticketing_system.theme.QurbanTicketingSystemTheme
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -31,7 +33,8 @@ fun NotificationPermissionDialog(
                 Text(
                     text = stringResource(btn_give_permission),
                     style = MaterialTheme.typography.titleSmallEmphasized.copy(
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 )
             }
@@ -43,7 +46,8 @@ fun NotificationPermissionDialog(
                 Text(
                     text = stringResource(btn_continue_without_permission),
                     style = MaterialTheme.typography.titleSmallEmphasized.copy(
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 )
             }
@@ -66,4 +70,16 @@ fun NotificationPermissionDialog(
         },
         modifier = modifier
     )
+}
+
+@Preview
+@Composable
+private fun PreviewNotificationPermissionDialog() {
+    QurbanTicketingSystemTheme {
+        NotificationPermissionDialog(
+            onDismiss = {},
+            onConfirmation = {},
+            onDeny = {},
+        )
+    }
 }

@@ -48,6 +48,7 @@ dependencies {
     implementation(platform(libs.arrow.bom))
     implementation(libs.arrow.core)
 
+    //  Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
 
@@ -56,13 +57,14 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(libs.bundles.koin.compose)
 
-    val nav_version = "2.9.0"
+    //  Paging
+    implementation(libs.paging.compose)
 
-    implementation("androidx.navigation:navigation-compose:$nav_version")
+    //  Serialization
     implementation(libs.serialization)
 
     implementation ("com.google.accompanist:accompanist-permissions:0.37.3")
     implementation("io.github.g00fy2.quickie:quickie-bundled:1.11.0")
 
-    implementation(libs.paging.compose)
+
 }

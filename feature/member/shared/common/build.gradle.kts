@@ -42,6 +42,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    //  Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
 
