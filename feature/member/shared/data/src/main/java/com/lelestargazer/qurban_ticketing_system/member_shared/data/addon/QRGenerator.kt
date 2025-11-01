@@ -30,7 +30,12 @@ import java.util.Calendar
 @Single
 class QRGenerator {
 
-    suspend fun saveCoupons(qrDataList: List<QRGeneratorData>) {
+    suspend fun saveCoupons(
+        //TODO: Change into received param only later without default value
+        location: String = "Lokasi Test",
+        time: String = "Jumat, 19 Agustus 2023",
+        qrDataList: List<QRGeneratorData>
+    ) {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         withContext(Dispatchers.IO) {
             val documentsDir = Environment
@@ -40,14 +45,16 @@ class QRGenerator {
             val writer = PdfWriter(file)
             val pdf = PdfDocument(writer)
             val document = Document(pdf, PageSize.A4)
+            document.setMargins(0F, 0F, 0F, 0F)
+
 
             // Process in smaller batches (8 instead of 16) to reduce memory usage
-            qrDataList.chunked(8).forEach { chunk ->
+            qrDataList.chunked(CHUNK_SIZE).forEach { chunk ->
                 val table = Table(floatArrayOf(50f, 50f))
                     .setAutoLayout()
                     .useAllAvailableWidth()
 
-                chunk.forEachIndexed { index, qrData ->
+                chunk.forEach { qrData ->
                     // Generate QR code
                     val qrCode = QRCode.ofRoundedSquares()
                         .withSize(20)
@@ -78,12 +85,11 @@ class QRGenerator {
                     bitmap.recycle()
                     stream.close()
 
-                    val individualCouponTable = Table(floatArrayOf(40f, 60f))
+                    val individualCouponTable = Table(floatArrayOf(30f, 70f))
 
                     individualCouponTable.addCell(
                         Cell()
                             .add(image)
-                            .setPadding(12f)
                             .setBorder(Border.NO_BORDER)
                             .setHorizontalAlignment(HorizontalAlignment.CENTER)
                             .setVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -96,19 +102,29 @@ class QRGenerator {
                                         Text("Kupon Qurban $currentYear\n")
                                             .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_BOLD))
                                     )
-                                    .add(qrData.couponName)
-                                    .add(qrData.couponStatus)
+                                    .add(
+                                        Text("Nama: ${qrData.couponName}\n")
+                                            .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                                    )
+                                    .add(
+                                        Text("Lokasi: ${location}\n")
+                                            .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                                    )
+                                    .add(
+                                        Text("Tanggal/Waktu: $time")
+                                            .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                                    )
                             )
                             .setVerticalAlignment(VerticalAlignment.MIDDLE)
                             .setHorizontalAlignment(HorizontalAlignment.LEFT)
-//                            .setBorder(Border.NO_BORDER)
+                            .setBorder(Border.NO_BORDER)
                     )
 
                     table.addCell(individualCouponTable)
                 }
 
                 document.add(table)
-                if (chunk != qrDataList.chunked(8).last()) {
+                if (chunk != qrDataList.chunked(CHUNK_SIZE).last()) {
                     document.add(AreaBreak())
                 }
             }
@@ -138,4 +154,8 @@ class QRGenerator {
         val couponStatus: String,
         val couponName: String,
     )
+
+    companion object {
+        private const val CHUNK_SIZE = 12
+    }
 }

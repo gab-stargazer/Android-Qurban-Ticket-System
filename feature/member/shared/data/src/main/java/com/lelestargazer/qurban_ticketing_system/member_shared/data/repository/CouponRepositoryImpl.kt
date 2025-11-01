@@ -158,7 +158,7 @@ class CouponRepositoryImpl(
             )
         }
 
-        qrGenerator.saveCoupons(qrData)
+        qrGenerator.saveCoupons(qrDataList = qrData)
         context.getString(msg_excel_create_members_success)
     }.mapLeft {
         Log.e(TAG, "createCoupons: ${it.stackTraceToString()}")
