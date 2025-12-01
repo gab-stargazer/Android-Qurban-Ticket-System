@@ -22,6 +22,9 @@
     <!--Button-->
     <string name="btn_whatsapp">Whatsapp</string>
     <string name="btn_phone">Telpon</string>
+    <string name="btn_select">Pilih</string>
+    <string name="btn_cancel">Batal</string>
+    <string name="btn_create_coupon">Cetak Kupon</string>
 
     <!--Form-->
     <string name="tv_member_search">Cari Peserta/Penerima</string>
@@ -37,4 +40,10 @@
     <!--Permission-->
     <string name="permission_title_notification">Izin Notifikasi diperlukan (Opsional)</string>
     <string name="permission_body_notification">Izin Notifikasi diperlukan agar dapat mengirimkan pemberitahuan kepada anda ketika proses selesai dilakukan. Anda dapat menolak izin dan proses tetap akan dilanjutkan, namun kami tidak akan dapat memberikan pemberitahuan kepada anda ketika proses selesai</string>
+
+    <!--Coupon-->
+    <string name="coupon_title">Kupon Qurban %1$s\n</string>
+    <string name="coupon_name_and_information">Nama: %1$s %2$s\n</string>
+    <string name="coupon_pickup_location">Lokasi: %1$s \n</string>
+    <string name="coupon_pickup_date">Waktu: %1$s</string>
 </resources>

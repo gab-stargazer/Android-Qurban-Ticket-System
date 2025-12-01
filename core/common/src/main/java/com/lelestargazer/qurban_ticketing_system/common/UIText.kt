@@ -8,7 +8,10 @@ import androidx.compose.ui.res.stringResource
 sealed class UIText {
 
     data class MessageString(val message: String) : UIText()
-    data class ResourceID(@StringRes val id: Int, val args: List<Any>) : UIText()
+    data class ResourceID(
+        @get:StringRes val id: Int,
+        val args: List<Any>
+    ) : UIText()
 
     fun asText(context: Context): String {
         return when (this) {
@@ -18,7 +21,7 @@ sealed class UIText {
     }
 
     @Composable
-    fun AsText(): String {
+    fun asText(): String {
         return when (this) {
             is MessageString -> message
             is ResourceID -> stringResource(id, *args.toTypedArray())

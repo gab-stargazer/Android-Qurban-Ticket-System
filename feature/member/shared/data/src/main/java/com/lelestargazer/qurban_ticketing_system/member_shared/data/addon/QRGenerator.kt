@@ -1,14 +1,18 @@
 package com.lelestargazer.qurban_ticketing_system.member_shared.data.addon
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.itextpdf.io.font.constants.StandardFonts
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.font.PdfFontFactory
 import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.kernel.pdf.xobject.PdfImageXObject
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
 import com.itextpdf.layout.element.AreaBreak
@@ -17,8 +21,18 @@ import com.itextpdf.layout.element.Image
 import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.element.Text
+import com.itextpdf.layout.properties.AreaBreakType
+import com.itextpdf.layout.properties.BackgroundImage
+import com.itextpdf.layout.properties.BackgroundSize
 import com.itextpdf.layout.properties.HorizontalAlignment
 import com.itextpdf.layout.properties.VerticalAlignment
+import com.lelestargazer.qurban_ticketing_system.member_shared.common.R
+import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.coupon_name_and_information
+import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.coupon_pickup_date
+import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.coupon_pickup_location
+import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.coupon_title
+import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.QurbanStatus
+import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.QurbanType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
@@ -28,14 +42,24 @@ import java.io.File
 import java.util.Calendar
 
 @Single
-class QRGenerator {
+class QRGenerator(
+    private val context: Context
+) {
+
+    private lateinit var byteArrayLogo: ByteArray
+    private lateinit var couponBackgroundImage: ByteArray
 
     suspend fun saveCoupons(
         //TODO: Change into received param only later without default value
         location: String = "Lokasi Test",
         time: String = "Jumat, 19 Agustus 2023",
+        isQrEnabled: Boolean = false,
         qrDataList: List<QRGeneratorData>
     ) {
+        setupBackgroundCoupon(isQrEnabled)
+        checkOrInitiateByteArrayLogo()
+
+
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         withContext(Dispatchers.IO) {
             val documentsDir = Environment
@@ -47,18 +71,116 @@ class QRGenerator {
             val document = Document(pdf, PageSize.A4)
             document.setMargins(0F, 0F, 0F, 0F)
 
-
             // Process in smaller batches (8 instead of 16) to reduce memory usage
             qrDataList.chunked(CHUNK_SIZE).forEach { chunk ->
+
                 val table = Table(floatArrayOf(50f, 50f))
-                    .setAutoLayout()
                     .useAllAvailableWidth()
 
+                table.setMargin(0F)
+                table.setPadding(0F)
+
                 chunk.forEach { qrData ->
+                    writeCoupon(
+                        isQrEnabled = isQrEnabled,
+                        data = CouponData(
+                            couponName = qrData.couponName,
+                            couponQR = qrData.qrCode,
+                            qurbanStatus = qrData.qurbanStatus,
+                            qurbanType = qrData.qurbanType,
+                            qurbanLocation = location,
+                            qurbanDate = time,
+                            qurbanYear = currentYear.toString()
+                        ),
+                        table = table
+                    )
+                }
+
+                document.add(table)
+                if (chunk != qrDataList.chunked(CHUNK_SIZE).last()) {
+                    document.add(AreaBreak(AreaBreakType.NEXT_PAGE))
+                }
+            }
+
+            document.close()
+            pdf.close()
+            writer.close()
+        }
+    }
+
+    fun getQrImage(qrHash: String): Bitmap {
+        checkOrInitiateByteArrayLogo()
+
+        val qrCode = QRCode.ofCircles()
+            .withSize(100)
+            .build(qrHash)
+            .renderToBytes()
+
+        return BitmapFactory.decodeByteArray(
+            qrCode,
+            0,
+            qrCode.size
+        )
+    }
+
+    fun checkOrInitiateByteArrayLogo() {
+        if (!::byteArrayLogo.isInitialized) {
+            val rawLogo = ContextCompat
+                .getDrawable(
+                    context,
+                    R.drawable.logo_qr
+                )
+                ?.toBitmap() ?: error("Icon can't be fetched")
+
+            val baos = ByteArrayOutputStream()
+            rawLogo.compress(Bitmap.CompressFormat.PNG, 80, baos)
+            byteArrayLogo = baos.toByteArray()
+
+            rawLogo.recycle()
+            baos.close()
+        }
+    }
+
+    private fun setupBackgroundCoupon(isQrEnabled: Boolean) {
+        val baos = ByteArrayOutputStream()
+        val drawable =
+            when (isQrEnabled) {
+                true -> ContextCompat.getDrawable(context, R.drawable.tiket_qurban_qr)
+                false -> ContextCompat.getDrawable(context, R.drawable.background_coupon)
+            }
+
+        val bitmap: Bitmap = drawable?.toBitmap() ?: error("Coupon background failed to be fetched")
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        couponBackgroundImage = baos.toByteArray()
+
+        baos.close()
+        bitmap.recycle()
+    }
+
+    private fun writeCoupon(
+        isQrEnabled: Boolean,
+        data: CouponData,
+        table: Table
+    ) {
+        with(context) {
+            when (isQrEnabled) {
+                true -> {
+//                    NOTE:
+//                    For the time being, i can't manage to make the Logo being rendered center on QR
+//
+//
+//                    val logo = ContextCompat.getDrawable(context, R.drawable.icon_qurban)
+//                    val bitmap = logo?.toBitmap() ?: error("Coupon Logo failed to be fetched")
+//                    val baos = ByteArrayOutputStream()
+//                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+//                    val byteArray = baos.toByteArray()
+//                    baos.close()
+//                    bitmap.recycle()
+
                     // Generate QR code
                     val qrCode = QRCode.ofRoundedSquares()
                         .withSize(20)
-                        .build(qrData.qrCode)
+                        .build(data.couponQR.orEmpty())
                         .render()
 
                     // Convert to compressed bitmap
@@ -99,19 +221,19 @@ class QRGenerator {
                             .add(
                                 Paragraph()
                                     .add(
-                                        Text("Kupon Qurban $currentYear\n")
+                                        Text("Kupon Qurban ${data.qurbanYear}\n")
                                             .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_BOLD))
                                     )
                                     .add(
-                                        Text("Nama: ${qrData.couponName}\n")
+                                        Text("Nama: ${data.couponName}\n")
                                             .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
                                     )
                                     .add(
-                                        Text("Lokasi: ${location}\n")
+                                        Text("Lokasi: ${data.qurbanLocation}\n")
                                             .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
                                     )
                                     .add(
-                                        Text("Tanggal/Waktu: $time")
+                                        Text("Tanggal/Waktu: ${data.qurbanDate}")
                                             .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
                                     )
                             )
@@ -120,42 +242,97 @@ class QRGenerator {
                             .setBorder(Border.NO_BORDER)
                     )
 
+                    individualCouponTable.setBackgroundImage(
+                        BackgroundImage.Builder()
+                            .setImage(PdfImageXObject(ImageDataFactory.create(couponBackgroundImage)))
+                            .setBackgroundSize(
+                                BackgroundSize().apply {
+                                    setBackgroundSizeToCover()
+                                }
+                            )
+                            .build()
+                    )
+
                     table.addCell(individualCouponTable)
                 }
 
-                document.add(table)
-                if (chunk != qrDataList.chunked(CHUNK_SIZE).last()) {
-                    document.add(AreaBreak())
+                false -> {
+                    val cell = Cell()
+                        .setHorizontalAlignment(HorizontalAlignment.LEFT)
+                        .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                        .setPaddingLeft(36F)
+                        .setPaddingTop(12F)
+                        .setPaddingBottom(12F)
+                        .add(
+                            Paragraph()
+                                .add(
+                                    Text(getString(coupon_title, data.qurbanYear))
+                                        .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_BOLD))
+                                        .setFontSize(12F)
+                                )
+                                .add(
+                                    Text(
+                                        getString(
+                                            coupon_name_and_information,
+                                            data.couponName,
+                                            when (data.qurbanStatus) {
+                                                QurbanStatus.Recipient -> ""
+                                                QurbanStatus.Participant ->
+                                                    "[${context.getString(data.qurbanType?.uiText ?: QurbanType.Cow.uiText)}]"
+                                            }
+                                        )
+                                    )
+                                        .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                                        .setFontSize(12F)
+                                )
+                                .add(
+                                    Text(getString(coupon_pickup_location, data.qurbanLocation))
+                                        .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                                        .setFontSize(12F)
+                                )
+                                .add(
+                                    Text(getString(coupon_pickup_date, data.qurbanDate))
+                                        .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                                        .setFontSize(12F)
+                                )
+                        )
+
+                    cell.setBackgroundImage(
+                        BackgroundImage.Builder()
+                            .setImage(PdfImageXObject(ImageDataFactory.create(couponBackgroundImage)))
+                            .setBackgroundSize(
+                                BackgroundSize().apply {
+                                    setBackgroundSizeToCover()
+                                }
+                            )
+                            .build()
+                    )
+
+                    table.addCell(cell)
                 }
             }
-
-            document.close()
-            pdf.close()
-            writer.close()
         }
     }
 
-    fun getQrImage(qrHash: String): Bitmap {
-        val qrCode = QRCode.ofRoundedSquares()
-            .withSize(25) // Reduced from 50
-            .build(qrHash)
-            .render()
-
-        val bitmap = BitmapFactory.decodeByteArray(
-            qrCode.getBytes(),
-            0,
-            qrCode.getBytes().size
-        )
-        return bitmap
-    }
+    private data class CouponData(
+        val couponName: String,
+        val couponQR: String? = null,
+        val qurbanStatus: QurbanStatus,
+        val qurbanType: QurbanType?,
+        val qurbanLocation: String,
+        val qurbanDate: String,
+        val qurbanYear: String,
+    )
 
     data class QRGeneratorData(
         val qrCode: String,
         val couponStatus: String,
         val couponName: String,
+        val qurbanStatus: QurbanStatus,
+        val qurbanType: QurbanType?,
     )
 
     companion object {
-        private const val CHUNK_SIZE = 12
+        private const val CHUNK_SIZE = 16
     }
 }

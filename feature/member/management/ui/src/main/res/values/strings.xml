@@ -22,6 +22,8 @@
     <string name="error_name_is_blank">Nama tidak boleh kosong</string>
     <string name="error_phone_number_is_not_sufficient">No. Telpon tidak boleh kurang dari 11 digit</string>
     <string name="error_phone_number_is_not_valid">No. Telpon tidak valid</string>
+    <string name="error_location_is_empty">Lokasi tidak boleh kosong</string>
+    <string name="error_selected_date_is_empty">Tanggal Pengambilan tidak boleh kosong</string>
 
 
     <!--Item-->

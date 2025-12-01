@@ -1,6 +1,7 @@
 package com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -34,14 +34,11 @@ import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.ToggleFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -62,6 +59,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.lelestargazer.qurban_ticketing_system.common.R.drawable.ic_import
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.R
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.component.FilterType
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.component.dialog_create_coupon.DialogCreateCoupon
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.component.member_item.MemberItem
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.ManagementEvent
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.ManagementEvent.OnBackPressed
@@ -74,12 +72,13 @@ import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.man
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.ManagementEvent.OnPermissionDialogDismissed
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.ManagementEvent.OnSearchQueryChanged
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.MemberManagementState
+import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.btn_create_coupon
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.ContactByPhoneNumberDialog
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.ManagementTicketingBanner
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.NotificationPermissionDialog
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
 import com.lelestargazer.qurban_ticketing_system.theme.QurbanTicketingSystemTheme
-import com.lelestargazer.qurban_ticketing_system.theme.containerColor
+import com.lelestargazer.qurban_ticketing_system.theme.component.CustomTextField
 
 
 @OptIn(
@@ -103,7 +102,7 @@ fun ManagementScreen(
 
     val excelSelectionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
-    ) { it ->
+    ) {
         it?.let { uri ->
             onEvent(OnImportData(uri))
         }
@@ -123,9 +122,11 @@ fun ManagementScreen(
                 onEvent(OnPermissionDialogDismissed)
             },
             onConfirmation = {
+                onEvent(OnPermissionDialogDismissed)
                 notificationPermission.launchPermissionRequest()
             },
             onDeny = {
+                onEvent(OnPermissionDialogDismissed)
                 excelSelectionLauncher.launch(arrayOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
             }
         )
@@ -157,6 +158,16 @@ fun ManagementScreen(
                         phoneNumber = null
                     )
                 )
+            }
+        )
+    }
+
+    if (state.isDialogCreateCouponShowed) {
+        DialogCreateCoupon(
+            state = state.dialogCreateCouponState,
+            onEvent = onEvent,
+            onDismiss = {
+                onEvent(ManagementEvent.OnCreateCouponDialogShowed(false))
             }
         )
     }
@@ -196,14 +207,16 @@ fun ManagementScreen(
             ) {
                 FloatingActionButtonMenuItem(
                     onClick = {
-                        if (lifecycle.isAtLeast(Lifecycle.State.RESUMED) && !notificationPermission.status.isGranted) {
-                            onEvent(OnImportMemberClicked)
-                        }
-
                         if (lifecycle.isAtLeast(Lifecycle.State.RESUMED)) {
-                            excelSelectionLauncher.launch(arrayOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                            //  Check for notification only
+                            if (Build.VERSION.SDK_INT >= 33 && notificationPermission.status.isGranted) {
+                                excelSelectionLauncher.launch(arrayOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                            } else if (Build.VERSION.SDK_INT >= 33) {
+                                onEvent(OnImportMemberClicked)
+                            } else {
+                                excelSelectionLauncher.launch(arrayOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                            }
                         }
-
                     },
                     icon = {
                         Icon(
@@ -245,6 +258,25 @@ fun ManagementScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
+
+                FloatingActionButtonMenuItem(
+                    onClick = {
+                        onEvent(ManagementEvent.OnCreateCouponDialogShowed(true))
+                    },
+                    icon = {
+
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(btn_create_coupon),
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    },
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
         },
         modifier = modifier
@@ -263,7 +295,7 @@ fun ManagementScreen(
                 }
             )
 
-            TextField(
+            CustomTextField(
                 value = state.searchQuery,
                 onValueChange = { newQuery ->
                     onEvent(OnSearchQueryChanged(newQuery))
@@ -313,33 +345,22 @@ fun ManagementScreen(
                 label = {
                     Text(
                         text = stringResource(R.string.form_search_name),
-                        style = MaterialTheme.typography.bodySmallEmphasized.copy(
+                        style = MaterialTheme.typography.titleSmallEmphasized.copy(
                             fontWeight = FontWeight.SemiBold
                         )
                     )
                 },
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = containerColor,
-                    focusedContainerColor = containerColor,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                ),
                 singleLine = true,
-                shape = RoundedCornerShape(25F),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
                         keyboardManager?.hide()
-                        focusManager.clearFocus()
+                        focusManager.clearFocus(true)
                     }
                 ),
-                textStyle = MaterialTheme.typography.bodySmall,
+                textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(

@@ -127,7 +127,7 @@ fun AddEditScreen(
                     AnimatedVisibility(state.nameError != null) {
                         state.nameError?.let { nameError ->
                             Text(
-                                text = nameError.AsText(),
+                                text = nameError.asText(),
                                 style = MaterialTheme.typography.bodySmall.copy(
                                     color = Color.Red
                                 )
@@ -195,7 +195,7 @@ fun AddEditScreen(
                     AnimatedVisibility(state.phoneNumberError != null) {
                         state.phoneNumberError?.let { phoneNumberError ->
                             Text(
-                                text = phoneNumberError.AsText(),
+                                text = phoneNumberError.asText(),
                                 style = MaterialTheme.typography.bodySmall.copy(
                                     color = Color.Red
                                 )

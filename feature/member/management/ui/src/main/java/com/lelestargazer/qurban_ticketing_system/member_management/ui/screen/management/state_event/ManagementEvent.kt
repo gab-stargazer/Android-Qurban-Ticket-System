@@ -41,6 +41,10 @@ sealed interface ManagementEvent {
     data object OnPermissionDialogDismissed
         : ManagementEvent
 
+    data class OnCreateCouponDialogShowed(
+        val isShown: Boolean
+    ) : ManagementEvent
+
     data class OnImportData(
         val uri: Uri
     ) : ManagementEvent

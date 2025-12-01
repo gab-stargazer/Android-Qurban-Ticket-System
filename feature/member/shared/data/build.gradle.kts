@@ -74,9 +74,9 @@ dependencies {
 
 
 
-    implementation(platform("org.kotlincrypto.hash:bom:0.7.0"))
+    implementation(platform("org.kotlincrypto.hash:bom:0.8.0"))
     implementation("org.kotlincrypto.hash:sha3")
-    implementation("com.google.zxing:core:3.4.0")
+    implementation("com.google.zxing:core:3.5.4")
 
     implementation("io.github.crispindeity:kotlin-snowflake:1.0.1")
 }

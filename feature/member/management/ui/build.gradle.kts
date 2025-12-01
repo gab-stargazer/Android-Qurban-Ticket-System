@@ -19,12 +19,14 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
     }
 
     buildFeatures {
@@ -33,6 +35,8 @@ android {
 }
 
 dependencies {
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 
     implementation(projects.core.common)
     implementation(projects.core.theme)
@@ -73,5 +77,7 @@ dependencies {
     implementation(libs.serialization)
 
     implementation("io.github.crispindeity:kotlin-snowflake:1.0.1")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
 
 }

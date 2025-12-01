@@ -18,4 +18,10 @@
     <string name="filter_type_all">Semua</string>
     <string name="filter_type_participant">Peserta</string>
     <string name="filter_type_recipient">Penerima</string>
+
+    <!--Dialog Create Coupon-->
+    <string name="dialog_create_coupon_label_location">Lokasi Qurban</string>
+    <string name="dialog_create_coupon_pickup_date">Tanggal Pengambilan</string>
+    <string name="dialog_create_coupon_no_pickup_date">Belum dipilih</string>
+    <string name="dialog_create_coupon_title">Masukkan Informasi Kupon</string>
 </resources>

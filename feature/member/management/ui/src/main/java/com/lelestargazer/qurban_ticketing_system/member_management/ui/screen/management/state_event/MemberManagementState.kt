@@ -19,6 +19,10 @@ data class MemberManagementState(
     val isContactByPhoneNumberDialogOpened: Boolean = false,
     val phoneNumber: String? = null,
 
+    //  Create Coupon
+    val isDialogCreateCouponShowed: Boolean = false,
+    val dialogCreateCouponState: DialogCreateCouponState = DialogCreateCouponState(),
+
 
     val members: Flow<PagingData<Member>> = flowOf(),
     val openedParticipantIndex: Int? = null,

@@ -5,14 +5,22 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import arrow.optics.copy
 import com.lelestargazer.qurban_ticketing_system.common.UiController
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.error_location_is_empty
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.error_selected_date_is_empty
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.route.MemberAddEdit
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.component.FilterType
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.DialogCreateCouponEvent
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.ManagementEvent
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.MemberManagementState
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.datePickerStateError
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.dialogCreateCouponState
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.isContactByPhoneNumberDialogOpened
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.isDialogCreateCouponShowed
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.isFabMenuExpanded
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.isFilterMenuOpened
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.isNotificationPermissionDialogOpened
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.location
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.locationError
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.openedParticipantIndex
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.phoneNumber
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Member
@@ -87,6 +95,10 @@ class ManagementViewModel(
             isContactByPhoneNumberDialogOpened = state.isContactByPhoneNumberDialogOpened,
             phoneNumber = state.phoneNumber,
 
+            //  Dialog Create Coupon
+            isDialogCreateCouponShowed = state.isDialogCreateCouponShowed,
+            dialogCreateCouponState = state.dialogCreateCouponState,
+
             members = _members,
             openedParticipantIndex = state.openedParticipantIndex,
         )
@@ -131,7 +143,6 @@ class ManagementViewModel(
                     }
                 }
             }
-
 
             is ManagementEvent.OnBackPressed -> uiController.navController.popBackStack()
 
@@ -208,6 +219,56 @@ class ManagementViewModel(
                         MemberManagementState.phoneNumber set event.phoneNumber
                     }
                 }
+            }
+
+            is ManagementEvent.OnCreateCouponDialogShowed -> {
+                _currentState.update { currentState ->
+                    currentState.copy {
+                        MemberManagementState.isDialogCreateCouponShowed set event.isShown
+                        MemberManagementState.isFabMenuExpanded set false
+                    }
+                }
+            }
+
+            //  Create Coupon Dialog Event
+            is DialogCreateCouponEvent.OnLocationChanged -> _currentState.update { currentState ->
+                currentState.copy {
+                    MemberManagementState.dialogCreateCouponState.location set event.location
+                    MemberManagementState.dialogCreateCouponState.locationError set null
+                }
+            }
+
+            DialogCreateCouponEvent.OnSelectedPickupDateChanged -> _currentState.update { currentState ->
+                MemberManagementState.dialogCreateCouponState.datePickerStateError.set(
+                    source = currentState,
+                    focus = null
+                )
+            }
+
+            DialogCreateCouponEvent.OnCreateCoupon -> viewModelScope.launch {
+                val currentState = state.value
+                val locationError: Int? =
+                    if (currentState.dialogCreateCouponState.location.isBlank())
+                        error_location_is_empty
+                    else null
+
+                val selectedDateError =
+                    if (currentState.dialogCreateCouponState.datePickerState.selectedDateMillis == null)
+                        error_selected_date_is_empty
+                    else null
+
+                val errors = listOf(locationError, selectedDateError)
+                if (errors.any { error -> error != null }) {
+                    _currentState.update { currentState_ ->
+                        currentState_.copy {
+                            MemberManagementState.dialogCreateCouponState.locationError set locationError
+                            MemberManagementState.dialogCreateCouponState.datePickerStateError set selectedDateError
+                        }
+                    }
+                    return@launch
+                }
+
+
             }
         }
     }

@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
-import org.kotlincrypto.hash.sha3.SHA3_256
+import org.kotlincrypto.hash.sha3.SHA3_224
 import java.util.Calendar
 import java.util.UUID
 
@@ -110,7 +110,7 @@ class CouponRepositoryImpl(
             participantWithTicket.filter { item -> item.coupon == null }
         if (participantWithoutTicket.isEmpty()) return@withContext
 
-        val sha256 = SHA3_256()
+        val sha256 = SHA3_224()
         val newCoupons = mutableListOf<CouponEntity>()
         participantWithoutTicket.forEach {
             val participant = it.member
@@ -154,7 +154,9 @@ class CouponRepositoryImpl(
             QRGenerator.QRGeneratorData(
                 qrCode = it.coupon.hashCode,
                 couponStatus = couponStatus,
-                couponName = it.coupon.memberName
+                couponName = it.coupon.memberName,
+                qurbanStatus = it.member.status,
+                qurbanType = it.member.type
             )
         }
 
