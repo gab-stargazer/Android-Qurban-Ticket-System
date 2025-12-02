@@ -22,12 +22,11 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -62,9 +61,9 @@ import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.add
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.QurbanStatus
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
 import com.lelestargazer.qurban_ticketing_system.theme.QurbanTicketingSystemTheme
-import com.lelestargazer.qurban_ticketing_system.theme.containerColor
+import com.lelestargazer.qurban_ticketing_system.theme.component.CustomTextField
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AddEditScreen(
     state: AddEditUiState,
@@ -101,7 +100,7 @@ fun AddEditScreen(
                     .padding(vertical = screenPadding.vertical)
             )
 
-            TextField(
+            CustomTextField(
                 value = state.name,
                 onValueChange = { newName ->
                     onEvent(OnNameChanged(newName))
@@ -116,12 +115,11 @@ fun AddEditScreen(
                 label = {
                     Text(
                         text = stringResource(id = R.string.form_name),
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = MaterialTheme.typography.labelMediumEmphasized.copy(
                             fontWeight = FontWeight.SemiBold
                         )
                     )
                 },
-                textStyle = MaterialTheme.typography.bodySmall,
                 isError = state.nameError != null,
                 supportingText = {
                     AnimatedVisibility(state.nameError != null) {
@@ -135,17 +133,6 @@ fun AddEditScreen(
                         }
                     }
                 },
-                colors = TextFieldDefaults.colors(
-                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    errorLabelColor = Color.Red.copy(0.75F),
-                    unfocusedContainerColor = containerColor,
-                    focusedContainerColor = containerColor,
-                    errorContainerColor = containerColor,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent,
-                ),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     keyboardType = KeyboardType.Text,
@@ -156,7 +143,6 @@ fun AddEditScreen(
                         focusManager.clearFocus()
                     }
                 ),
-                shape = RoundedCornerShape(25F),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenPadding.horizontal)
@@ -169,7 +155,7 @@ fun AddEditScreen(
                 }
             )
 
-            TextField(
+            CustomTextField(
                 value = state.phoneNumber,
                 onValueChange = { newPhoneNumber ->
                     onEvent(OnPhoneNumberChanged(newPhoneNumber))
@@ -184,12 +170,11 @@ fun AddEditScreen(
                 label = {
                     Text(
                         text = stringResource(id = R.string.label_phone_number),
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = MaterialTheme.typography.labelMediumEmphasized.copy(
                             fontWeight = FontWeight.SemiBold
                         )
                     )
                 },
-                textStyle = MaterialTheme.typography.bodySmall,
                 isError = state.phoneNumberError != null,
                 supportingText = {
                     AnimatedVisibility(state.phoneNumberError != null) {
@@ -203,17 +188,6 @@ fun AddEditScreen(
                         }
                     }
                 },
-                colors = TextFieldDefaults.colors(
-                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    errorLabelColor = Color.Red.copy(0.75F),
-                    unfocusedContainerColor = containerColor,
-                    focusedContainerColor = containerColor,
-                    errorContainerColor = containerColor,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent,
-                ),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
                     imeAction = ImeAction.Done
@@ -223,7 +197,6 @@ fun AddEditScreen(
                         focusManager.clearFocus()
                     }
                 ),
-                shape = RoundedCornerShape(25F),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = phoneNumberPaddingTop)
@@ -237,7 +210,7 @@ fun AddEditScreen(
                 }
             )
 
-            TextField(
+            CustomTextField(
                 value = state.address,
                 onValueChange = { newAddress ->
                     onEvent(OnAddressChanged(newAddress))
@@ -245,7 +218,7 @@ fun AddEditScreen(
                 label = {
                     Text(
                         text = stringResource(id = R.string.label_address),
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = MaterialTheme.typography.labelMediumEmphasized.copy(
                             fontWeight = FontWeight.SemiBold
                         )
                     )
@@ -257,18 +230,6 @@ fun AddEditScreen(
                         modifier = Modifier.size(24.dp)
                     )
                 },
-                textStyle = MaterialTheme.typography.bodySmall,
-                colors = TextFieldDefaults.colors(
-                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    errorLabelColor = Color.Red.copy(0.75F),
-                    unfocusedContainerColor = containerColor,
-                    focusedContainerColor = containerColor,
-                    errorContainerColor = containerColor,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent,
-                ),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     capitalization = KeyboardCapitalization.Sentences,
@@ -279,7 +240,6 @@ fun AddEditScreen(
                         focusManager.clearFocus()
                     }
                 ),
-                shape = RoundedCornerShape(25F),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = addressPaddingTop)
@@ -288,7 +248,7 @@ fun AddEditScreen(
 
             Text(
                 text = stringResource(R.string.tv_participant_recipient_status),
-                style = MaterialTheme.typography.titleSmall.copy(
+                style = MaterialTheme.typography.titleSmallEmphasized.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier

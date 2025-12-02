@@ -32,6 +32,7 @@ android {
 
 dependencies {
 
+    implementation(projects.core.common)
     implementation(projects.feature.member.shared.common)
     implementation(projects.feature.member.shared.domain)
 

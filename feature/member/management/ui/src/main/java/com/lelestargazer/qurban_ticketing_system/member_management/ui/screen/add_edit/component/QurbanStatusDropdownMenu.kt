@@ -2,16 +2,14 @@ package com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.ad
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,10 +27,10 @@ import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.add
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.QurbanStatus
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
 import com.lelestargazer.qurban_ticketing_system.theme.QurbanTicketingSystemTheme
-import com.lelestargazer.qurban_ticketing_system.theme.containerColor
+import com.lelestargazer.qurban_ticketing_system.theme.component.CustomTextField
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun QurbanStatusDropdownMenu(
     status: QurbanStatus,
@@ -51,7 +48,7 @@ fun QurbanStatusDropdownMenu(
         },
         modifier = modifier.padding(horizontal = screenPadding.horizontal)
     ) {
-        TextField(
+        CustomTextField(
             value =
                 stringResource(
                     when (status) {
@@ -64,7 +61,7 @@ fun QurbanStatusDropdownMenu(
             label = {
                 Text(
                     text = stringResource(R.string.label_qurban_status),
-                    style = MaterialTheme.typography.labelSmall.copy(
+                    style = MaterialTheme.typography.labelMediumEmphasized.copy(
                         fontWeight = FontWeight.SemiBold
                     )
                 )
@@ -72,19 +69,6 @@ fun QurbanStatusDropdownMenu(
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(isQurbanStatusExpanded)
             },
-            textStyle = MaterialTheme.typography.bodySmall,
-            colors = TextFieldDefaults.colors(
-                unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                errorLabelColor = Color.Red.copy(0.75F),
-                unfocusedContainerColor = containerColor,
-                focusedContainerColor = containerColor,
-                errorContainerColor = containerColor,
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent,
-            ),
-            shape = RoundedCornerShape(25F),
             modifier = Modifier
                 .fillMaxWidth()
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)

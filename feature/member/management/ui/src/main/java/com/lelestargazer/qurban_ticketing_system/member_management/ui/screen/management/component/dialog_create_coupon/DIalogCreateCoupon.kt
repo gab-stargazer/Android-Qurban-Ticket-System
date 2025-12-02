@@ -91,7 +91,7 @@ fun DialogCreateCoupon(
                 )
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(0.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier =
                         Modifier
@@ -104,6 +104,9 @@ fun DialogCreateCoupon(
                         stringResource(id = dialog_create_coupon_title),
                         style = MaterialTheme.typography.titleMediumEmphasized.copy(
                             fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.padding(
+                            top = LocalScreenPadding.current.vertical
                         )
                     )
 
@@ -120,7 +123,6 @@ fun DialogCreateCoupon(
                                 )
                             )
                         },
-                        textStyle = MaterialTheme.typography.bodyMedium,
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.LocationOn,
@@ -186,7 +188,6 @@ fun DialogCreateCoupon(
                                     )
                                 )
                             },
-                            textStyle = MaterialTheme.typography.bodyMedium,
                             readOnly = true,
                             isError = state.datePickerStateError != null,
                             supportingText = {
@@ -213,7 +214,7 @@ fun DialogCreateCoupon(
                         if (shouldShownDatePicker) {
                             val newDatePickerState = rememberDatePickerState(
                                 initialDisplayMode = DisplayMode.Picker,
-                                selectableDates = FutureSelectableDate
+                                selectableDates = FutureSelectableDate,
                             )
 
                             DatePickerDialog(

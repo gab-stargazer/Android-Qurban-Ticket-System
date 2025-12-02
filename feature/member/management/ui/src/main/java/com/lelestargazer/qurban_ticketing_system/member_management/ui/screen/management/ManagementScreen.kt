@@ -58,6 +58,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.lelestargazer.qurban_ticketing_system.common.R.drawable.ic_import
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.R
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.form_search_name
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.component.FilterType
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.component.dialog_create_coupon.DialogCreateCoupon
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.component.member_item.MemberItem
@@ -344,8 +345,8 @@ fun ManagementScreen(
                 },
                 label = {
                     Text(
-                        text = stringResource(R.string.form_search_name),
-                        style = MaterialTheme.typography.titleSmallEmphasized.copy(
+                        text = stringResource(form_search_name),
+                        style = MaterialTheme.typography.labelMediumEmphasized.copy(
                             fontWeight = FontWeight.SemiBold
                         )
                     )
@@ -360,7 +361,6 @@ fun ManagementScreen(
                         focusManager.clearFocus(true)
                     }
                 ),
-                textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(

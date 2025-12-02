@@ -3,6 +3,7 @@ package com.lelestargazer.qurban_ticketing_system.theme.component
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import com.lelestargazer.qurban_ticketing_system.theme.containerColor
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun CustomTextField(
     modifier: Modifier = Modifier,
@@ -20,7 +22,7 @@ fun CustomTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     label: @Composable (() -> Unit)? = null,
-    textStyle: TextStyle = TextStyle.Default,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     singleLine: Boolean = false,
     readOnly: Boolean = false,
     isError: Boolean = false,
@@ -43,6 +45,7 @@ fun CustomTextField(
             focusedTextColor = MaterialTheme.colorScheme.onSurface,
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
+            errorIndicatorColor = Color.Transparent
         ),
         supportingText = supportingText,
         singleLine = singleLine,

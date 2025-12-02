@@ -28,11 +28,18 @@ interface MemberRepository {
 
     fun importMembersByExcel(uri: Uri): String
 
-    fun selectAllMembers(query: String): Flow<PagingData<Member>>
+    suspend fun selectAllMembers(): List<Member>
+
+    fun selectAllMembersAsPaging(query: String): Flow<PagingData<Member>>
 
     fun selectMembersByStatus(query: String, status: QurbanStatus): Flow<PagingData<Member>>
 
     suspend fun updateMember(member: Member)
 
     suspend fun deleteMember(member: Member)
+
+    fun createCoupon(
+        location: String,
+        pickupDate: Long
+    ): String
 }

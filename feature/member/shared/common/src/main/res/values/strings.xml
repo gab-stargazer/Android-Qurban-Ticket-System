@@ -8,7 +8,7 @@
     <string name="msg_member_participant">Peserta</string>
     <string name="msg_member_recipient">Penerima</string>
     <string name="msg_coupon_not_found">Kupon tidak ditemukan</string>
-
+    <string name="msg_you_will_be_notified">Anda akan mendapatkan notifikasi ketika kupon selesai dicetak</string>
 
     <string name="msg_excel_create_members_failed">Member gagal ditambahkan melalui data excel</string>
     <string name="msg_excel_create_invalid_format">Mohon periksa kembali format Excel yang digunakan</string>

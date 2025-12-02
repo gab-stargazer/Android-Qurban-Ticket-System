@@ -30,8 +30,11 @@ interface MemberDao {
     @Update
     suspend fun updateMember(member: MemberEntity)
 
+    @Query("SELECT * FROM member_table")
+    suspend fun selectAllMembers(): List<MemberEntity>
+
     @Query("SELECT * FROM member_table WHERE name LIKE '%' || :query || '%' ORDER BY name ASC")
-    fun selectAllMembers(query: String): PagingSource<Int, MemberEntity>
+    fun selectAllMembersAsPaging(query: String): PagingSource<Int, MemberEntity>
 
     @Query("SELECT * FROM member_table WHERE (name LIKE '%' || :query || '%' AND status = :status) ORDER BY name ASC")
     fun selectMembersByStatus(query: String, status: QurbanStatus): PagingSource<Int, MemberEntity>

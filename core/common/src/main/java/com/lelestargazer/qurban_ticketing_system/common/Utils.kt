@@ -1,6 +1,5 @@
 package com.lelestargazer.qurban_ticketing_system.common
 
-import android.annotation.SuppressLint
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -17,7 +16,6 @@ fun String?.ifNotBlank(block: (String) -> Unit) {
     }
 }
 
-@SuppressLint("NewApi")
 @OptIn(ExperimentalTime::class)
 fun Long.toFormattedDate(): String {
     val instant = Instant.fromEpochMilliseconds(this).toJavaInstant()
@@ -26,7 +24,12 @@ fun Long.toFormattedDate(): String {
         ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
 
     val formattedDate: String =
-        zonedDateTime.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.of("id-ID")))
+        zonedDateTime.format(
+            DateTimeFormatter.ofPattern(
+                "dd MMMM yyyy",
+                Locale.forLanguageTag("id")
+            )
+        )
 
     return formattedDate
 }

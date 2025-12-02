@@ -10,6 +10,7 @@ import com.lelestargazer.qurban_ticketing_system.member_management.ui.R.string.e
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.route.MemberAddEdit
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.component.FilterType
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.DialogCreateCouponEvent
+import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.DialogCreateCouponState
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.ManagementEvent
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.MemberManagementState
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.datePickerStateError
@@ -59,7 +60,7 @@ class ManagementViewModel(
         val status = pair.second
 
         when (status) {
-            FilterType.All -> repository.selectAllMembers(searchQuery)
+            FilterType.All -> repository.selectAllMembersAsPaging(searchQuery)
 
             FilterType.Participant -> repository.selectMembersByStatus(
                 searchQuery,
@@ -268,7 +269,20 @@ class ManagementViewModel(
                     return@launch
                 }
 
+                _currentState.update { currentState_ ->
+                    currentState_.copy {
+                        MemberManagementState.isDialogCreateCouponShowed set false
+                        MemberManagementState.dialogCreateCouponState set DialogCreateCouponState()
+                    }
+                }
 
+                uiController.snackBarHost.showSnackbar(
+                    repository.createCoupon(
+                        location = currentState.dialogCreateCouponState.location,
+                        pickupDate = currentState.dialogCreateCouponState.datePickerState.selectedDateMillis
+                            ?: error("Pickup Date is null but bypassed previous check")
+                    )
+                )
             }
         }
     }
