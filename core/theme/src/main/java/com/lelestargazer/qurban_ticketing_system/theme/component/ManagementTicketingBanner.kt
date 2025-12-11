@@ -1,4 +1,4 @@
-package com.lelestargazer.qurban_ticketing_system.member_shared.common.component
+package com.lelestargazer.qurban_ticketing_system.theme.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,22 +20,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
-import com.lelestargazer.qurban_ticketing_system.common.R.string.btn_back
-import com.lelestargazer.qurban_ticketing_system.common.R.string.tv_title_app_name
-import com.lelestargazer.qurban_ticketing_system.member_shared.common.R
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
+import com.lelestargazer.qurban_ticketing_system.theme.R.drawable.banner
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ManagementTicketingBanner(
     title: String,
+    isMainMenu: Boolean,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -52,7 +50,7 @@ fun ManagementTicketingBanner(
             modifier = Modifier.fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(R.drawable.banner_management_ticketing),
+                painter = painterResource(banner),
                 contentDescription = null,
                 alignment = Alignment.Center,
                 contentScale = ContentScale.FillWidth,
@@ -74,45 +72,56 @@ fun ManagementTicketingBanner(
         }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = screenPadding.horizontal)
                 .padding(top = screenPadding.vertical)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    onClick = {
-                        if (lifecycle.isAtLeast(Lifecycle.State.RESUMED)) {
-                            onBackPressed()
-                        }
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
+            when (isMainMenu) {
+                true -> {
+                    Box(Modifier.weight(1F))
                 }
 
-                Text(
-                    text = stringResource(id = btn_back),
-                    style = MaterialTheme.typography.titleSmallEmphasized.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                )
+                false -> {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = {
+                                if (lifecycle.isAtLeast(Lifecycle.State.RESUMED)) {
+                                    onBackPressed()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+
+                        Text(
+                            text = "Kembali",
+                            style = MaterialTheme.typography.titleSmallEmphasized.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            )
+                        )
+                    }
+                }
             }
 
             Text(
-                stringResource(tv_title_app_name),
+                "E-Qurban",
                 textAlign = TextAlign.End,
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White
+                ),
+                modifier = Modifier.padding(
+                    vertical = screenPadding.vertical
                 )
             )
         }

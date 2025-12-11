@@ -69,7 +69,6 @@ import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.t
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.tv_member_recipient
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.tv_member_search
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.tv_no_data
-import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.ManagementTicketingBanner
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.Coupon
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.CouponRedeemStatus
 import com.lelestargazer.qurban_ticketing_system.member_shared.domain.model.QurbanStatus
@@ -85,6 +84,7 @@ import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.c
 import com.lelestargazer.qurban_ticketing_system.member_ticketing.ui.ticketing.component.TicketingLoading
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
 import com.lelestargazer.qurban_ticketing_system.theme.QurbanTicketingSystemTheme
+import com.lelestargazer.qurban_ticketing_system.theme.component.ManagementTicketingBanner
 import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanQRCode
 
@@ -295,6 +295,7 @@ fun TicketingScreen(
         ) {
             ManagementTicketingBanner(
                 title = "",
+                isMainMenu = false,
                 onBackPressed = {
                     onEvent(OnBackPressed)
                 }

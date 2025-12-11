@@ -75,11 +75,11 @@ import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.man
 import com.lelestargazer.qurban_ticketing_system.member_management.ui.screen.management.state_event.MemberManagementState
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.R.string.btn_create_coupon
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.ContactByPhoneNumberDialog
-import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.ManagementTicketingBanner
 import com.lelestargazer.qurban_ticketing_system.member_shared.common.component.NotificationPermissionDialog
 import com.lelestargazer.qurban_ticketing_system.theme.LocalScreenPadding
 import com.lelestargazer.qurban_ticketing_system.theme.QurbanTicketingSystemTheme
 import com.lelestargazer.qurban_ticketing_system.theme.component.CustomTextField
+import com.lelestargazer.qurban_ticketing_system.theme.component.ManagementTicketingBanner
 
 
 @OptIn(
@@ -291,6 +291,7 @@ fun ManagementScreen(
 
             ManagementTicketingBanner(
                 title = stringResource(id = R.string.tv_management_banner_title),
+                isMainMenu = false,
                 onBackPressed = {
                     onEvent(OnBackPressed)
                 }
